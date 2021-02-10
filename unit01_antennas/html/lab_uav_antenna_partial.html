@@ -1,0 +1,514 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Simulating a 28 GHz antenna for a UAV</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-02-09"><meta name="DC.source" content="lab_uav_antenna_partial.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Simulating a 28 GHz antenna for a UAV</h1><!--introduction--><p>For complex antennas, it is often necessary to perform detailed EM simulations in third-party software such as HFSS and then import the results into MATLAB for analysis. In this lab, we will import HFSS simulation data for a 28 GHz antenna designed for a UAV (unmanned aerial vehicle or drone).  Antenna modeling is particularly important for mmWave aerial links since the directivity gain is necessary to overcome the high isotropic path loss of mmWave frequencies.  Also, UAVs can be an arbitrary orientation and it is important to model the cases when the UAV is out of the beamwidth of the antenna.</p><p>In going through this lab, you will learn to:</p><div><ul><li>Import data from an EM simulation data given as a   <a href="https://www.mathworks.com/help/matlab/ref/table.html">MATLAB table object</a>.</li><li>Compute directivity from E-field values</li><li>Create custom arrays in MATLAB's phased array toolbox</li><li>Display 2D and 3D antenna patterns</li><li>Compute the half-power beamwidth (HPBW) of an antenna</li><li>Compute fractions of power in angular areas</li><li>Estimate the path loss along a path</li></ul></div><p><b>Submission</b>:  Complete all the sections marked <tt>TODO</tt>, and run the cells to make sure your scipt is working.  When you are satisfied with the results,  <a href="https://www.mathworks.com/help/matlab/matlab_prog/publishing-matlab-code.html">publish your code</a> to generate an html file.  Print the html file to PDF and submit the PDF.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Load the data</a></li><li><a href="#4">Reading and the data table</a></li><li><a href="#6">Getting the E-field</a></li><li><a href="#8">Compute the directivity</a></li><li><a href="#9">Plotting the 3D antenna pattern</a></li><li><a href="#11">Plot a polar 2D plot</a></li><li><a href="#12">Computing the half-power beamwidth</a></li><li><a href="#14">Computing power fractions.</a></li><li><a href="#15">Computing the path loss along a path</a></li></ul></div><h2 id="1">Load the data</h2><p>The data for this lab was generously donated by Vasilii Semkin of VTT and taken from the paper:</p><div><ul><li>W Xia,V. Semkin, M. Mezzavilla, G. Loianno, S. Rangan,   Multi-array Designs for MmWave and Sub-THzCommunication to UAVs,   2020</li></ul></div><p>The paper performs EM simulations on a ciccularly polarized 28 GHz antenna mounted to the bottom of a commercial DJI Matrice 100 quadrocopter. An image of the drone with the antenna and its pattern is shown in the following picture.</p><pre class="codeinput">A = imread(<span class="string">'./CP_patch_downwards_m100_3D_coord.png'</span>);
+imshow(A, <span class="string">'InitialMagnification'</span>, 40);
+</pre><img vspace="5" hspace="5" src="lab_uav_antenna_partial_01.png" alt=""> <p>We will first load the data with the following command.</p><pre class="codeinput">load <span class="string">patch_bottom_data.mat</span>
+</pre><p>Running the above command should create an object, <tt>data_table</tt>, in your workspace.  The <tt>data_table</tt> object is a MATLAB table, which is like a SQL table.  Run the following command to see the first five rows. You should see the fields in each table entry including the azimuth and elevation and the corresponding V and H fields.</p><pre class="codeinput">data_table(1:5,:)
+</pre><pre class="codeoutput">
+ans =
+
+  5&times;9 table
+
+    x_AngleIndex    Elevation    Azimuth    Frequency    TotVReal    TotVImag    TotHReal    TotHImag       Var9   
+    ____________    _________    _______    _________    ________    ________    ________    ________    __________
+
+         0             -90          0        2.8e+10     0.018862    0.037489     0.02257    0.019296    {0&times;0 char}
+         1             -90          2        2.8e+10     0.019638     0.03814    0.021898    0.017976    {0&times;0 char}
+         2             -90          4        2.8e+10     0.020391    0.038744    0.021199    0.016634    {0&times;0 char}
+         3             -90          6        2.8e+10     0.021118    0.039301    0.020475    0.015272    {0&times;0 char}
+         4             -90          8        2.8e+10      0.02182     0.03981    0.019725    0.013891    {0&times;0 char}
+
+</pre><h2 id="4">Reading and the data table</h2><p>We can read the table columns into MATLAB arrays with commands such as,</p><pre>    col = data_table(:,{column_name}).Variables;</pre><pre class="codeinput"><span class="comment">% TODO:  Read the 'Elevation' and 'Azimuth' columns into matlab arrays</span>
+<span class="comment">% el and az.</span>
+el = data_table(:,{<span class="string">'Elevation'</span>}).Variables;
+az = data_table(:,{<span class="string">'Azimuth'</span>}).Variables;
+</pre><p>In this simulation, the antenna was pointed upwards, meaning that the boresight is at an elevation of 90 degrees.  But, since we want to simulate antenna pointing downwards, we need to switch the signs of the elevation angles.</p><pre class="codeinput"><span class="comment">% TODO:  Switch the elevation angles with el = -el;</span>
+el = -el;
+</pre><h2 id="6">Getting the E-field</h2><p>Most EM simulations prodcuce outputs as E-field at some distance from the antenna.  The E-field is represented by two complex values, one for the H polarization and for the V polarization.</p><pre class="codeinput"><span class="comment">% TODO:  Read the complex E-fields from the data_table object.  Store them</span>
+<span class="comment">% in variables EH and EV.</span>
+
+EV = data_table(:,{<span class="string">'TotVReal'</span>}).Variables + <span class="keyword">...</span>
+     1i*data_table(:,{<span class="string">'TotVImag'</span>}).Variables;
+EH = data_table(:,{<span class="string">'TotHReal'</span>}).Variables + <span class="keyword">...</span>
+     1i*data_table(:,{<span class="string">'TotHImag'</span>}).Variables;
+</pre><p>Recall that the radiation intensity and any point is proportional to the E-field power,</p><pre>  W = Epow/eta,  Epow = |EH|^2 + |EV|^2.</pre><p>where eta is characteristic impedance.  This is the power flux that can be received by an antenna exactly aligned in polarization with the E-field.</p><pre class="codeinput"><span class="comment">% TODO:  Compute the E-field power, Epow = |EH|^2 + |EV|^2.</span>
+<span class="comment">% Remember to use the MATLAB abs() command.</span>
+Epow = abs(EH).^2 + abs(EV).^2;
+</pre><h2 id="8">Compute the directivity</h2><p>We next compute the directivity of the antenna.  The directivity of the antenna is given by,</p><pre>   dir = U / Ptot</pre><p>where Ptot is the total radiated power and U is the far-field radiation density</p><pre>   U = r^2 W = r^2 Epow / eta</pre><p>Hence, the directivity (in linear scale) is:</p><pre>   dir = c*Epow</pre><p>for some constant c.  To compute the constant c, we know that the average of the directivity dir * cos(el) over a spherical integral must be one.  Hence, if we take mean over the discrete values, you should have that:</p><pre>    mean(dir.*cos(el)) / mean(cos(el)) = 1</pre><p>You can use this relation to find the scale factor, c.</p><p>TODO:  Compute a vector, dir, with the directivity of each point in dBi.  Remember, MATLAB's cos() function takes the argument in radians.</p><pre class="codeinput">el_rad = deg2rad(el);
+c = mean(cos(el_rad))/mean(Epow.*cos(el_rad));
+dir = c*Epow;
+
+ratio = mean(dir.*cos(el_rad)) / mean(cos(el_rad));
+
+<span class="comment">% TODO:  Print the maximum gain.</span>
+maxD = max(dir);
+maxD_dBi = 10*log10(maxD);
+fprintf(1, <span class="string">'maximum gain = %f\n'</span>, maxD);
+fprintf(1, <span class="string">'maximum gain [dBi] = %f\n'</span>, maxD_dBi);
+</pre><pre class="codeoutput">maximum gain = 5.646113
+maximum gain [dBi] = 7.517496
+</pre><h2 id="9">Plotting the 3D antenna pattern</h2><p>To plot the antenna pattern, we will create a CustomAntennaObject in MATLAB's phased array toolbox.  However, to use the CustomAntennaObject, we need to re-format the directivity vector into a matrix.  The process is tedious, but conceptually simple.  What we need to do is create a matrix, <tt>dirMat</tt>, with values, <tt>dirMat(i,j)</tt> is the directivity at (elevation, azimuth) angles <tt>(elval(i), azval(j))</tt>.</p><pre class="codeinput">elvals = (-90:2:90)';
+azvals = (-180:2:180)';
+nel = length(elvals);
+naz = length(azvals);
+disp(naz*nel);
+fprintf(1, <span class="string">'# elevation angles = %f\n'</span>, nel);
+fprintf(1, <span class="string">'# azimuth angles = %f\n'</span>, naz);
+</pre><pre class="codeoutput">       16471
+
+# elevation angles = 91.000000
+# azimuth angles = 181.000000
+</pre><p>If you have done everything correctly up to now, you will have a vector, dir, that is should be  naz*nel x 1. To convert this to the dirMat matrix, you can do the following:</p><div><ul><li>Reshape the vector, <tt>dir</tt>, into a directory <tt>dirMat</tt> of size   <tt>naz x nel</tt> Take the transpose of the matrix so it is <tt>nel x naz</tt>.</li><li>Circularly shift (using the MATLAB command circshift) so that the first   column of dirMat is moved to the position corresponding to az=0.  We do   this since the angles in dirMat go from 0 to 360, not -180 to 180</li><li>Flip the dirMat vertically with the MATLAB command flipud.  We do this   since we want to look at an antenna pattern facing downwards</li></ul></div><p>TODO:  Create dirMat as above</p><pre class="codeinput">dirMat = reshape(dir,[naz,nel]).';
+first = dirMat(:,1);
+I = find(azvals == 0);
+dirMat = circshift(dirMat,I,2);
+dirMat = flipud(dirMat);
+<span class="comment">% TODO:  Now, create the antenna object with the correct parameters</span>
+<span class="comment">% Use an all zero phasePattern.</span>
+
+phasePattern = zeros(size(dirMat));
+ant  = phased.CustomAntennaElement(<span class="keyword">...</span>
+    <span class="string">'AzimuthAngles'</span>   , azvals,    <span class="keyword">...</span>
+    <span class="string">'ElevationAngles'</span> , elvals,    <span class="keyword">...</span>
+    <span class="string">'MagnitudePattern'</span>, 10*log10(dirMat),    <span class="keyword">...</span>
+    <span class="string">'PhasePattern'</span>    , phasePattern);
+
+<span class="comment">% TODO:  Plot the antenna pattern with the ant.pattern() command</span>
+fc = 28e9;
+ant.pattern(fc);
+</pre><img vspace="5" hspace="5" src="lab_uav_antenna_partial_02.png" alt=""> <h2 id="11">Plot a polar 2D plot</h2><p>We next plot a 2D antenna pattern</p><p>TODO:  Use the ant.patternElevation(...) to plot the antenna cut at azPlot = 0 degrees</p><pre class="codeinput">azPlot = 0;
+patternElevation(ant, fc);
+</pre><img vspace="5" hspace="5" src="lab_uav_antenna_partial_03.png" alt=""> <h2 id="12">Computing the half-power beamwidth</h2><p>The half-power beamwidth is a common value in describing the directivity of an antenna.  We show how this quantity can be computed. First, get the numerical values of the directivity along a cut at azPlot = 0.  We do this with the same command as above, but with an output argument:</p><pre class="codeinput"><span class="comment">% TODO:  Run the clf('reset') command.  This is needed since the last plot</span>
+<span class="comment">% was a pattern plot,</span>
+clf(<span class="string">'reset'</span>);
+<span class="comment">% TODO:</span>
+dircut = ant.patternElevation(fc);
+
+<span class="comment">% This returns the directivity along elevation angles elcut</span>
+elcut = (-180:180)';
+</pre><img vspace="5" hspace="5" src="lab_uav_antenna_partial_04.png" alt=""> <p>The HPBW is the range of angles that correspond to the directivity 3 dB below the peak.</p><pre class="codeinput">dir_range = maxD_dBi-3;
+I = find(dircut &gt;= 10^(dir_range/10));
+hpbw_angles = elcut(I);
+<span class="comment">% TODO:  Use the dircut and elcut vectors to find and print the HPBW.</span>
+max_an = max(hpbw_angles);
+min_an = min(hpbw_angles);
+HPBW = abs(max_an-min_an);
+fprintf(1, <span class="string">'The HPBW is %f\n'</span>, HPBW);
+</pre><pre class="codeoutput">The HPBW is 104.000000
+</pre><h2 id="14">Computing power fractions.</h2><p>Often we are interested in finding the fraction of radiated power in some angular region.  The fraction of power radiated in any region is proportional to the sum of values Epow(i)*cos(el(i)) for all points i in the region.</p><pre class="codeinput">tot_power = sum(Epow.*cos(el_rad));
+<span class="comment">% TODO:  Use this relation to print the fraction of power radiated in</span>
+<span class="comment">% the upper hemisphere.  This should be small, since most of the</span>
+<span class="comment">% power is radiated downwards.</span>
+dircut_upper = dircut(181:end);
+<span class="comment">%upper_power = sum((dircut_upper/c).*cos();</span>
+<span class="comment">% TODO:  Print the power fraction within the HPBW:</span>
+</pre><h2 id="15">Computing the path loss along a path</h2><pre class="codeinput"><span class="comment">% Following the code in the demo, plot the path loss (omni and</span>
+<span class="comment">% with element gain) of a UAV RX flying from (0,0,30) to (500,0,30)</span>
+<span class="comment">% in a linear path.  Assume the TX is at (0,0,0).</span>
+<span class="comment">%</span>
+<span class="comment">% TODO:  Plot the omni and directional path loss vs. x position.</span>
+<span class="comment">%</span>
+<span class="comment">% You should see initially that you obtain significant antenna gain</span>
+<span class="comment">% since the antenna is facing downwards to the TX.  But, as you fly</span>
+<span class="comment">% the antenna gain decreases and becomes negative.  Before plotting you</span>
+<span class="comment">% will want to run the command, clf('reset').  This is necessary since the</span>
+<span class="comment">% pattern plots above screw up later figures.</span>
+clf(<span class="string">'reset'</span>);
+c=physconst(<span class="string">'Lightspeed'</span>);
+lambda = c/fc;
+x = linspace(0,500,1000);
+y = zeros(1,1000);
+z = linspace(30,30,1000);
+
+<span class="comment">% plotting the UAV path</span>
+plot3(x,y,z); hold <span class="string">on</span>;
+plot3(0,0,0, <span class="string">'x'</span>, <span class="string">'MarkerSize'</span>,10); hold <span class="string">on</span>;
+plot3(0,0,30, <span class="string">'o'</span>, <span class="string">'MarkerSize'</span>,10); hold <span class="string">on</span>;
+plot3(500,0,30, <span class="string">'d'</span>, <span class="string">'MarkerSize'</span>,10);
+xlabel(<span class="string">'x'</span>);ylabel(<span class="string">'y'</span>);zlabel(<span class="string">'z'</span>);
+grid();
+title(<span class="string">'UAV Flying Path'</span>);
+legend(<span class="string">'UAV path'</span>,<span class="string">'TX position'</span>,<span class="string">'UAV start'</span>,<span class="string">'UAV end'</span>,<span class="keyword">...</span>
+    <span class="string">'Location'</span>,<span class="string">'southoutside'</span>,<span class="string">'Orientation'</span>,<span class="string">'horizontal'</span>);
+
+<span class="comment">% the azimuth az0 is 0 since the UAV is moving along the x axis.</span>
+[az0, el0, rad0] = cart2sph(x, y, z);
+az0 = rad2deg(az0)';
+el0 = rad2deg(el0)';
+[new_dir,new_az,new_el] = ant.pattern(fc, <span class="string">'Type'</span>, <span class="string">'Directivity'</span>);
+F = griddedInterpolant({new_el,new_az},new_dir);
+dirGain = F(-el0, az0)';
+
+plOmni = fspl(rad0, lambda);
+plDir = plOmni - dirGain;
+
+figure;
+plot(x,plOmni,<span class="string">'LineWidth'</span>,2); hold <span class="string">on</span>;
+plot(x,plDir,<span class="string">'LineWidth'</span>,2);
+title(<span class="string">'Omni vs Directional Path loss'</span>);
+legend(<span class="string">'Omni'</span>,<span class="string">'Directional'</span>);
+xlabel(<span class="string">'Distance on x axis [m]'</span>);
+ylabel(<span class="string">'Path Loss [dB]'</span>);
+grid();
+</pre><img vspace="5" hspace="5" src="lab_uav_antenna_partial_05.png" alt=""> <img vspace="5" hspace="5" src="lab_uav_antenna_partial_06.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Simulating a 28 GHz antenna for a UAV
+%
+% For complex antennas, it is often necessary to perform detailed EM
+% simulations in third-party software such as HFSS and then import 
+% the results into MATLAB for analysis. In this lab, we will import HFSS
+% simulation data for a 28 GHz antenna designed for a UAV (unmanned aerial 
+% vehicle or drone).  Antenna modeling is particularly important for mmWave 
+% aerial links since the directivity gain is necessary to overcome the
+% high isotropic path loss of mmWave frequencies.  Also, UAVs can be
+% an arbitrary orientation and it is important to model the cases when
+% the UAV is out of the beamwidth of the antenna.
+% 
+% In going through this lab, you will learn to:
+%
+% * Import data from an EM simulation data given as a 
+%   <https://www.mathworks.com/help/matlab/ref/table.html MATLAB table object>.
+% * Compute directivity from E-field values
+% * Create custom arrays in MATLAB's phased array toolbox 
+% * Display 2D and 3D antenna patterns
+% * Compute the half-power beamwidth (HPBW) of an antenna
+% * Compute fractions of power in angular areas
+% * Estimate the path loss along a path
+%
+% *Submission*:  Complete all the sections marked |TODO|, and run the cells 
+% to make sure your scipt is working.  When you are satisfied with the 
+% results,  <https://www.mathworks.com/help/matlab/matlab_prog/publishing-matlab-code.html
+% publish your code> to generate an html file.  Print the html file to
+% PDF and submit the PDF.
+
+
+%% Load the data
+% The data for this lab was generously donated by Vasilii 
+% Semkin of VTT and taken from the paper:
+%
+% * W Xia,V. Semkin, M. Mezzavilla, G. Loianno, S. Rangan, 
+%   Multi-array Designs for MmWave and Sub-THzCommunication to UAVs, 
+%   2020
+% 
+% The paper performs EM simulations on a ciccularly polarized 
+% 28 GHz antenna mounted to the bottom of a commercial DJI Matrice 100 
+% quadrocopter. An image of the drone with the antenna and its pattern
+% is shown in the following picture.
+A = imread('./CP_patch_downwards_m100_3D_coord.png');
+imshow(A, 'InitialMagnification', 40);
+
+%% 
+% We will first load the data with the following command.  
+load patch_bottom_data.mat
+
+%% 
+% Running the above command should create an object, |data_table|, in 
+% your workspace.  The |data_table| object is a MATLAB table,
+% which is like a SQL table.  Run the following command to see the first 
+% five rows. You should see the fields in each table entry including 
+% the azimuth and elevation and the corresponding V and H fields.
+data_table(1:5,:)
+
+%% Reading and the data table
+% We can read the table columns into MATLAB arrays with commands such as,
+% 
+%      col = data_table(:,{column_name}).Variables;
+
+% TODO:  Read the 'Elevation' and 'Azimuth' columns into matlab arrays
+% el and az.
+el = data_table(:,{'Elevation'}).Variables;
+az = data_table(:,{'Azimuth'}).Variables;
+
+%%
+% In this simulation, the antenna was pointed upwards, meaning that the 
+% boresight is at an elevation of 90 degrees.  But, since we want to
+% simulate antenna pointing downwards, we need to switch the signs of the
+% elevation angles.  
+
+% TODO:  Switch the elevation angles with el = -el;
+el = -el;
+
+%% Getting the E-field
+% Most EM simulations prodcuce outputs as E-field at some distance from the
+% antenna.  The E-field is represented by two complex values, one for
+% the H polarization and for the V polarization.  
+
+% TODO:  Read the complex E-fields from the data_table object.  Store them
+% in variables EH and EV.
+
+EV = data_table(:,{'TotVReal'}).Variables + ...
+     1i*data_table(:,{'TotVImag'}).Variables;
+EH = data_table(:,{'TotHReal'}).Variables + ...
+     1i*data_table(:,{'TotHImag'}).Variables;
+
+%%
+% Recall that the radiation intensity and any point is proportional to
+% the E-field power,
+%
+%    W = Epow/eta,  Epow = |EH|^2 + |EV|^2.
+%
+% where eta is characteristic impedance.  This is the power flux 
+% that can be received by an antenna exactly aligned in polarization
+% with the E-field.  
+
+% TODO:  Compute the E-field power, Epow = |EH|^2 + |EV|^2.
+% Remember to use the MATLAB abs() command.
+Epow = abs(EH).^2 + abs(EV).^2;
+
+%% Compute the directivity
+% We next compute the directivity of the antenna.  The directivity 
+% of the antenna is given by,
+%
+%     dir = U / Ptot
+%
+% where Ptot is the total radiated power and U is the far-field
+% radiation density
+%
+%     U = r^2 W = r^2 Epow / eta
+%
+% Hence, the directivity (in linear scale) is:
+%
+%     dir = c*Epow
+%
+% for some constant c.  To compute the constant c, we know that
+% the average of the directivity dir * cos(el) over a spherical integral 
+% must be one.  Hence, if we take mean over the discrete values, you should
+% have that:
+%   
+%      mean(dir.*cos(el)) / mean(cos(el)) = 1
+%
+% You can use this relation to find the scale factor, c.
+%     
+% TODO:  Compute a vector, dir, with the directivity of each point
+% in dBi.  Remember, MATLAB's cos() function takes the argument in 
+% radians.
+el_rad = deg2rad(el);
+c = mean(cos(el_rad))/mean(Epow.*cos(el_rad));
+dir = c*Epow;
+
+ratio = mean(dir.*cos(el_rad)) / mean(cos(el_rad));
+
+% TODO:  Print the maximum gain. 
+maxD = max(dir);
+maxD_dBi = 10*log10(maxD);
+fprintf(1, 'maximum gain = %f\n', maxD);
+fprintf(1, 'maximum gain [dBi] = %f\n', maxD_dBi);
+
+%% Plotting the 3D antenna pattern
+% To plot the antenna pattern, we will create a CustomAntennaObject in
+% MATLAB's phased array toolbox.  However, to use the CustomAntennaObject,
+% we need to re-format the directivity vector into a matrix.  The process
+% is tedious, but conceptually simple.  What we need to do is create
+% a matrix, |dirMat|, with values, |dirMat(i,j)| is the directivity 
+% at (elevation, azimuth) angles |(elval(i), azval(j))|.
+elvals = (-90:2:90)';
+azvals = (-180:2:180)';
+nel = length(elvals);
+naz = length(azvals);
+disp(naz*nel);
+fprintf(1, '# elevation angles = %f\n', nel);
+fprintf(1, '# azimuth angles = %f\n', naz);
+%%
+% If you have done everything correctly up to now, you will have a vector,
+% dir, that is should be  naz*nel x 1. To convert this to the 
+% dirMat matrix, you can do the following:
+%
+% * Reshape the vector, |dir|, into a directory |dirMat| of size 
+%   |naz x nel| Take the transpose of the matrix so it is |nel x naz|.
+% * Circularly shift (using the MATLAB command circshift) so that the first
+%   column of dirMat is moved to the position corresponding to az=0.  We do
+%   this since the angles in dirMat go from 0 to 360, not -180 to 180
+% * Flip the dirMat vertically with the MATLAB command flipud.  We do this
+%   since we want to look at an antenna pattern facing downwards
+%
+% TODO:  Create dirMat as above
+dirMat = reshape(dir,[naz,nel]).';
+first = dirMat(:,1);
+I = find(azvals == 0);
+dirMat = circshift(dirMat,I,2);
+dirMat = flipud(dirMat);
+% TODO:  Now, create the antenna object with the correct parameters
+% Use an all zero phasePattern.
+
+phasePattern = zeros(size(dirMat));
+ant  = phased.CustomAntennaElement(...
+    'AzimuthAngles'   , azvals,    ...
+    'ElevationAngles' , elvals,    ...
+    'MagnitudePattern', 10*log10(dirMat),    ...
+    'PhasePattern'    , phasePattern);
+
+% TODO:  Plot the antenna pattern with the ant.pattern() command
+fc = 28e9;
+ant.pattern(fc);
+
+%% Plot a polar 2D plot
+% We next plot a 2D antenna pattern
+% 
+% TODO:  Use the ant.patternElevation(...) to plot the antenna cut
+% at azPlot = 0 degrees
+azPlot = 0;
+patternElevation(ant, fc);
+
+%% Computing the half-power beamwidth
+% The half-power beamwidth is a common value in describing the 
+% directivity of an antenna.  We show how this quantity can be computed.
+% First, get the numerical values of the directivity along a cut
+% at azPlot = 0.  We do this with the same command as above, but with
+% an output argument:
+
+% TODO:  Run the clf('reset') command.  This is needed since the last plot
+% was a pattern plot, 
+clf('reset');
+% TODO:  
+dircut = ant.patternElevation(fc);
+
+% This returns the directivity along elevation angles elcut
+elcut = (-180:180)';
+
+%%
+% The HPBW is the range of angles that correspond to the directivity
+% 3 dB below the peak.
+
+dir_range = maxD_dBi-3;
+I = find(dircut >= 10^(dir_range/10));
+hpbw_angles = elcut(I);
+% TODO:  Use the dircut and elcut vectors to find and print the HPBW.
+max_an = max(hpbw_angles);
+min_an = min(hpbw_angles);
+HPBW = abs(max_an-min_an);
+fprintf(1, 'The HPBW is %f\n', HPBW);
+
+%% Computing power fractions.
+% Often we are interested in finding the fraction of radiated power
+% in some angular region.  The fraction of power radiated in any 
+% region is proportional to the sum of values Epow(i)*cos(el(i))
+% for all points i in the region.
+
+tot_power = sum(Epow.*cos(el_rad));
+% TODO:  Use this relation to print the fraction of power radiated in 
+% the upper hemisphere.  This should be small, since most of the
+% power is radiated downwards.
+dircut_upper = dircut(181:end);
+%upper_power = sum((dircut_upper/c).*cos();
+% TODO:  Print the power fraction within the HPBW:
+
+%% Computing the path loss along a path
+
+% Following the code in the demo, plot the path loss (omni and
+% with element gain) of a UAV RX flying from (0,0,30) to (500,0,30)
+% in a linear path.  Assume the TX is at (0,0,0).  
+%
+% TODO:  Plot the omni and directional path loss vs. x position.
+% 
+% You should see initially that you obtain significant antenna gain
+% since the antenna is facing downwards to the TX.  But, as you fly
+% the antenna gain decreases and becomes negative.  Before plotting you
+% will want to run the command, clf('reset').  This is necessary since the 
+% pattern plots above screw up later figures.
+clf('reset');
+c=physconst('Lightspeed');
+lambda = c/fc;
+x = linspace(0,500,1000);
+y = zeros(1,1000);
+z = linspace(30,30,1000);
+
+% plotting the UAV path
+plot3(x,y,z); hold on;
+plot3(0,0,0, 'x', 'MarkerSize',10); hold on;
+plot3(0,0,30, 'o', 'MarkerSize',10); hold on;
+plot3(500,0,30, 'd', 'MarkerSize',10);
+xlabel('x');ylabel('y');zlabel('z');
+grid();
+title('UAV Flying Path');
+legend('UAV path','TX position','UAV start','UAV end',...
+    'Location','southoutside','Orientation','horizontal');
+
+% the azimuth az0 is 0 since the UAV is moving along the x axis.
+[az0, el0, rad0] = cart2sph(x, y, z);
+az0 = rad2deg(az0)';
+el0 = rad2deg(el0)';
+[new_dir,new_az,new_el] = ant.pattern(fc, 'Type', 'Directivity');
+F = griddedInterpolant({new_el,new_az},new_dir);
+dirGain = F(-el0, az0)';
+
+plOmni = fspl(rad0, lambda);
+plDir = plOmni - dirGain;
+
+figure;
+plot(x,plOmni,'LineWidth',2); hold on;
+plot(x,plDir,'LineWidth',2);
+title('Omni vs Directional Path loss');
+legend('Omni','Directional');
+xlabel('Distance on x axis [m]');
+ylabel('Path Loss [dB]');
+grid();
+
+##### SOURCE END #####
+--></body></html>

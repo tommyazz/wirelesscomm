@@ -269,7 +269,7 @@ title('UAV Flying Path');
 legend('UAV path','TX position','UAV start','UAV end',...
     'Location','southoutside','Orientation','horizontal');
 
-% the azimuth az0 is 0 since the UAV is moving along the x axis.
+% the azimuth az0 is 0 since the UAV is moving al the x axis.
 [az0, el0, rad0] = cart2sph(x, y, z);
 az0 = rad2deg(az0)';
 el0 = rad2deg(el0)';
