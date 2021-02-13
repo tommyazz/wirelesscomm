@@ -130,14 +130,16 @@ Epow = abs(EH).^2 + abs(EV).^2;
 % radians.
 el_rad = deg2rad(el);
 c = mean(cos(el_rad))/mean(Epow.*cos(el_rad));
-dir = c*Epow;
-
+dir =c*Epow;
 ratio = mean(dir.*cos(el_rad)) / mean(cos(el_rad));
+disp(ratio);
+
+dir_dB = pow2db(dir); % directivity in dBi
 
 % TODO:  Print the maximum gain. 
-maxD = max(dir);
-maxD_dBi = 10*log10(maxD);
-fprintf(1, 'maximum gain = %f\n', maxD);
+maxD_dBi = max(dir_dB);
+maxD_lin = db2pow(maxD_dBi);
+fprintf(1, 'maximum gain = %f\n', maxD_lin);
 fprintf(1, 'maximum gain [dBi] = %f\n', maxD_dBi);
 
 %% Plotting the 3D antenna pattern
@@ -152,8 +154,8 @@ azvals = (-180:2:180)';
 nel = length(elvals);
 naz = length(azvals);
 disp(naz*nel);
-fprintf(1, '# elevation angles = %f\n', nel);
-fprintf(1, '# azimuth angles = %f\n', naz);
+fprintf(1, 'number of elevation angles = %f\n', nel);
+fprintf(1, 'number of azimuth angles = %f\n', naz);
 %%
 % If you have done everything correctly up to now, you will have a vector,
 % dir, that is should be  naz*nel x 1. To convert this to the 
@@ -168,8 +170,8 @@ fprintf(1, '# azimuth angles = %f\n', naz);
 %   since we want to look at an antenna pattern facing downwards
 %
 % TODO:  Create dirMat as above
-dirMat = reshape(dir,[naz,nel]).';
-first = dirMat(:,1);
+dirMat = reshape(dir_dB,[naz,nel])';
+% first = dirMat(:,1);
 I = find(azvals == 0);
 dirMat = circshift(dirMat,I,2);
 dirMat = flipud(dirMat);
@@ -180,7 +182,7 @@ phasePattern = zeros(size(dirMat));
 ant  = phased.CustomAntennaElement(...
     'AzimuthAngles'   , azvals,    ...
     'ElevationAngles' , elvals,    ...
-    'MagnitudePattern', 10*log10(dirMat),    ...
+    'MagnitudePattern', dirMat,    ...
     'PhasePattern'    , phasePattern);
 
 % TODO:  Plot the antenna pattern with the ant.pattern() command
@@ -193,7 +195,10 @@ ant.pattern(fc);
 % TODO:  Use the ant.patternElevation(...) to plot the antenna cut
 % at azPlot = 0 degrees
 azPlot = 0;
-patternElevation(ant, fc);
+figure;
+patternElevation(ant, fc, azPlot);
+figure;
+patternAzimuth(ant,fc,0);
 
 %% Computing the half-power beamwidth
 % The half-power beamwidth is a common value in describing the 
@@ -206,19 +211,16 @@ patternElevation(ant, fc);
 % was a pattern plot, 
 clf('reset');
 % TODO:  
-dircut = ant.patternElevation(fc);
-
 % This returns the directivity along elevation angles elcut
 elcut = (-180:180)';
+dircut = patternElevation(ant, fc, azPlot);
 
 %%
 % The HPBW is the range of angles that correspond to the directivity
 % 3 dB below the peak.
-
-dir_range = maxD_dBi-3;
-I = find(dircut >= 10^(dir_range/10));
-hpbw_angles = elcut(I);
 % TODO:  Use the dircut and elcut vectors to find and print the HPBW.
+dir_range = max(dircut)-3;
+hpbw_angles = elcut(dircut >= dir_range);
 max_an = max(hpbw_angles);
 min_an = min(hpbw_angles);
 HPBW = abs(max_an-min_an);
@@ -229,15 +231,26 @@ fprintf(1, 'The HPBW is %f\n', HPBW);
 % in some angular region.  The fraction of power radiated in any 
 % region is proportional to the sum of values Epow(i)*cos(el(i))
 % for all points i in the region.
-
+[new_dir,new_az,new_el] = ant.pattern(fc, 'Type', 'Directivity');
 tot_power = sum(Epow.*cos(el_rad));
+I = find(el_rad>0);
+el_up = el_rad(I);
+Epow_up = Epow(I);
+up_power = sum(Epow_up.*cos(el_up));
+ratio_up = up_power/ tot_power;
+fprintf(1, 'The fraction of power in the upper region is %f\n', ratio_up)
 % TODO:  Use this relation to print the fraction of power radiated in 
 % the upper hemisphere.  This should be small, since most of the
 % power is radiated downwards.
-dircut_upper = dircut(181:end);
-%upper_power = sum((dircut_upper/c).*cos();
-% TODO:  Print the power fraction within the HPBW:
 
+% TODO:  Print the power fraction within the HPBW:
+I_hpbw = (el >= -90 & el <= -36);
+el_hpbw = el_rad(I_hpbw);
+Epow_hpbw = Epow(I_hpbw);
+hpbw_power = sum(Epow_hpbw.*cos(el_hpbw));
+ratio_hpbw = hpbw_power / tot_power;
+fprintf(1, 'The fraction of power within the HPBW region is %f\n',...
+        ratio_hpbw);
 %% Computing the path loss along a path
 
 % Following the code in the demo, plot the path loss (omni and
@@ -252,11 +265,10 @@ dircut_upper = dircut(181:end);
 % will want to run the command, clf('reset').  This is necessary since the 
 % pattern plots above screw up later figures.
 clf('reset');
-c=physconst('Lightspeed');
-lambda = c/fc;
-x = linspace(0,500,1000);
-y = zeros(1,1000);
-z = linspace(30,30,1000);
+lambda = physconst('Lightspeed')/fc;
+x = linspace(0,500,100);
+y = zeros(1,100);
+z = linspace(30,30,100);
 
 % plotting the UAV path
 plot3(x,y,z); hold on;
@@ -269,13 +281,13 @@ title('UAV Flying Path');
 legend('UAV path','TX position','UAV start','UAV end',...
     'Location','southoutside','Orientation','horizontal');
 
-% the azimuth az0 is 0 since the UAV is moving al the x axis.
-[az0, el0, rad0] = cart2sph(x, y, z);
+% the azimuth az0 is 0 since the UAV is moving along the x axis.
+[az0, el0, rad0] = cart2sph(-x, -y, -z);
 az0 = rad2deg(az0)';
 el0 = rad2deg(el0)';
-[new_dir,new_az,new_el] = ant.pattern(fc, 'Type', 'Directivity');
-F = griddedInterpolant({new_el,new_az},new_dir);
-dirGain = F(-el0, az0)';
+%[new_dir,new_az,new_el] = ant.pattern(fc, 'Type', 'Directivity');
+F = griddedInterpolant({elvals,azvals},dirMat);
+dirGain = F(el0, az0)';
 
 plOmni = fspl(rad0, lambda);
 plDir = plOmni - dirGain;
