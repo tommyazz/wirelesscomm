@@ -175,7 +175,6 @@ ylabel('Path loss (dB)');
 set(gca, 'Fontsize', 16);
 
 
-
 %% Compute the SNR CDF
 % We next compute the SNR at each point.  We will assume powers of an 
 % 802.11ad-like system.  Note the high directivity in our assumptions.
