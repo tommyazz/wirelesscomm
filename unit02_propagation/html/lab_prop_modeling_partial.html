@@ -1,0 +1,621 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Lab:  Fitting Propagation Models from Ray Tracing Data</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-02-19"><meta name="DC.source" content="lab_prop_modeling_partial.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Lab:  Fitting Propagation Models from Ray Tracing Data</h1><!--introduction--><p>Ray tracing is a widely-used method for predicting wireless coverage in complex indoor and outdoor environments.  Ray tracers take a 3D model of some region along with locations of transmitters and can predict the path characteristics from the transmitter locations to specified receiver locations.  Ray tracing requires certain assumptions (such as building materials to make the material), so they may not be exact.  Nevertheless, they provide an excellent approximation and are often used by cellular carriers to select sites for deploying cells.  In this lab, we will use ray tracing outputs to generate a collection of path data from which we can fit analytic models.  Ray tracing can provide much more data than would be possible with time-consuming real measurements.</p><p>In going through this data, you will learn to:</p><div><ul><li>Load and describe ray tracing data produced from a commercial ray   tracing tool</li><li>Compute the omni-directional path loss from the ray tracing data</li><li>Determine if links are in outage (no path), LOS or NLOS</li><li>Visualize the path loss and link state as a function of distance</li><li>Fit simple models for the path loss and link state using machine   learning tools</li></ul></div><p><b>Submission</b>:  Complete all the sections marked <tt>TODO</tt>, and run the cells to make sure your scipt is working.  When you are satisfied with the results,  <a href="https://www.mathworks.com/help/matlab/matlab_prog/publishing-matlab-code.html">publish your code</a> to generate an html file.  Print the html file to PDF and submit the PDF.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Data from Remcom</a></li><li><a href="#2">Loading the data</a></li><li><a href="#3">Determine omni-directional path loss and minimum path delay</a></li><li><a href="#4">Plot the path loss vs. distance</a></li><li><a href="#5">Classify points</a></li><li><a href="#6">Plot the path loss vs. distance for the NLOS and LOS links</a></li><li><a href="#7">Linear fit for the path loss model</a></li><li><a href="#8">Plotting the link state</a></li><li><a href="#9">Predicting the link state</a></li><li><a href="#10">Compare the link state</a></li></ul></div><h2 id="1">Data from Remcom</h2><p>The data is in this lab was created by NYU MS student Sravan Chintareddy and Research Scientist Marco Mezzavilla.  They used a widely-used and powerful commercial ray tracer from  <a href="https://www.remcom.com/">Remcom</a>. Remcom is one of the best ray tracing tools in the industry.  Although we will illustrate the concepts at 1.9 GHz carrier, the Remcomm tool is particularly excellent for mmWave studies.  Remcom has generously provided their software to NYU for purpose of generating the data for this lab and other research.</p><p>The data was in this lab comes from a simulation of a section of Reston, VA. In this simulation, a number of transmitters were placed in the area in location similar to possible micro-cellular sites.  The receivers were placed on street levels similar to pedestrians (UEs). We can plot the area and the sites with the following.</p><pre class="codeinput">A = imread(<span class="string">'map.png'</span>);
+imshow(A, <span class="string">'InitialMagnification'</span>, 40);
+</pre><img vspace="5" hspace="5" src="lab_prop_modeling_partial_01.png" alt=""> <h2 id="2">Loading the data</h2><p>We can load the data with the following command. This will create three variables in your workspace.</p><div><ul><li>txpos:   A trx x 3 array of the positions of the transmitters</li><li>rxpos:   An nrx x 3 array of the positions of the receivers</li><li>pathTable:  A table of all the paths</li></ul></div><pre class="codeinput">load <span class="string">pathData</span>;
+
+<span class="comment">% TODO:  Find nrx, ntx and npath</span>
+nrx = size(rxpos,1);
+ntx = size(txpos,1);
+npath = size(pathTable,1);
+
+fprintf(1, <span class="string">'number of receivers = %.2f\n'</span>, nrx);
+fprintf(1, <span class="string">'number of transmitters = %.2f\n'</span>, ntx);
+fprintf(1, <span class="string">'number of paths = %.2f\n'</span>, npath);
+
+<span class="comment">% TODO:  Plot the locations  of the TX and RX on the x-y plane.</span>
+<span class="comment">% You can ignore the z coordinate of both in the plot.  Use different</span>
+<span class="comment">% markers (e.g. 'o' and 's' for the TX and RXs).</span>
+figure;
+plot(txpos(:,1), txpos(:,2), <span class="string">'o'</span>); hold <span class="string">on</span>;
+plot(rxpos(:,1), rxpos(:,2), <span class="string">'s'</span>); grid <span class="string">on</span>;
+ylabel(<span class="string">'m'</span>,<span class="string">'fontsize'</span>,12); xlabel(<span class="string">'m'</span>, <span class="string">'fontsize'</span>,12);
+title(<span class="string">'Transmitters and Receivers locations'</span>);
+legend(<span class="string">'TXs'</span>,<span class="string">'RXs'</span>, <span class="string">'Location'</span>, <span class="string">'southoutside'</span>,<span class="string">'orientation'</span>,<span class="string">'horizontal'</span>);
+</pre><pre class="codeoutput">number of receivers = 100.00
+number of transmitters = 20.00
+number of paths = 24297.00
+</pre><img vspace="5" hspace="5" src="lab_prop_modeling_partial_02.png" alt=""> <h2 id="3">Determine omni-directional path loss and minimum path delay</h2><p>The table, pathTable, has one row for each path found in the ray tracer. Each path has a TXID and RXID and key statistics like the RX power and delay.  Due to multi-path, a (TXID,RXID) pair may have more than one path.</p><pre class="codeinput"><span class="comment">% TODO:  Use the head command to print the first few rows of the path</span>
+<span class="comment">% table.</span>
+disp(head(pathTable,5));
+
+<span class="comment">% TODO:  Loop through the paths and create the following arrays,</span>
+<span class="comment">% such that for each RXID i and TXID j:</span>
+<span class="comment">%    pathExists(i,j) = 1 if there exists at least one path</span>
+<span class="comment">%    totRx(i,j) = total RX power in linear scale</span>
+<span class="comment">%    minDly(i,j) = minimum path delay (taken from the toa_sec column)</span>
+txIDs = int32(pathTable(:,{<span class="string">'TXID'</span>}).Variables);
+rxIDs = pathTable(:,{<span class="string">'RXID'</span>}).Variables;
+rxPowers = pathTable(:,{<span class="string">'rx_power_dbm'</span>}).Variables;
+delays = pathTable(:,{<span class="string">'toa_sec'</span>}).Variables;
+maxTXID = max(txIDs);
+maxRXID = max(rxIDs);
+
+pathExists = zeros(nrx,ntx);
+totRx = zeros(nrx,ntx);
+minDly = 100*ones(nrx,ntx);
+<span class="keyword">for</span> p = 1:npath
+    pathExists(rxIDs(p),txIDs(p)) = 1;
+    totRx(rxIDs(p),txIDs(p)) = totRx(rxIDs(p),txIDs(p)) + db2pow(rxPowers(p));
+    minDly(rxIDs(p),txIDs(p)) = min(minDly(rxIDs(p),txIDs(p)), delays(p));
+<span class="keyword">end</span>
+
+<span class="comment">% TODO:  For each link (i,j), compute the omni-directional path loss,</span>
+<span class="comment">% which is defined as the txPowdBm - total received power (dBm).</span>
+<span class="comment">% In this dataset, txPowdBm = 36</span>
+txPowdBm = 36;
+plomni = txPowdBm - pow2db(totRx);
+</pre><pre class="codeoutput">    TXID    RXID    rx_power_dbm    Phase_deg     toa_sec      doa_theta_deg    doa_phi_deg    aoa_theta_deg    aoa_phi_deg
+    ____    ____    ____________    _________    __________    _____________    ___________    _____________    ___________
+
+     1       1        -36.444        -39.827     1.6711e-07        85.51          34.222           94.49          -145.78  
+     1       1        -39.774         93.772     1.7921e-07       85.813          40.727          94.187           150.77  
+     1       1        -43.031         152.01     1.6815e-07       96.635          34.707          98.116          -145.94  
+     1       1        -45.614        -30.955     1.8011e-07       95.542          41.133          97.573           150.91  
+     1       1        -57.011         52.312     1.0343e-06       89.275          11.876          90.725            3.643  
+
+</pre><h2 id="4">Plot the path loss vs. distance</h2><p>Just to get an idea of the path losses, we plot the omni directional path losses as a function of distance and compare against the FSPL.</p><pre class="codeinput"><span class="comment">% TODO:  Using the arrays rxpos and txpos, compute</span>
+<span class="comment">%   dist(i,j) = distance between RX i and TX j in meters.</span>
+<span class="comment">% Do this without for loops.</span>
+x_dist = rxpos(:,1) - txpos(:,1)';
+y_dist = rxpos(:,2) - txpos(:,2)';
+z_dist = rxpos(:,3) - txpos(:,3)';
+dist = sqrt(x_dist.^2 + y_dist.^2 + z_dist.^2);
+
+<span class="comment">% At this point, you should have nrx x ntx matrices such as dist,</span>
+<span class="comment">% plomni, minDly and pathExists.  For the subsequent analysis, it is</span>
+<span class="comment">% useful to convert these to nrx*ntx x 1 vectors.</span>
+<span class="comment">%</span>
+<span class="comment">% TODO:  Convert dist, plomni, minDly and pathExists to vectors</span>
+<span class="comment">% dist1, plomni1, ...</span>
+distl = reshape(dist,[nrx*ntx,1]);
+plomnil = reshape(plomni,[nrx*ntx,1]);
+minDlyl = reshape(minDly,[nrx*ntx,1]);
+pathExistsl = logical(reshape(pathExists,[nrx*ntx,1]));
+
+<span class="comment">% TODO:  Compute the free-space path loss for 100 points from dmin to dmax.</span>
+<span class="comment">% Use the fspl() command.</span>
+dmin = 10;
+dmax = 500;
+fc = 1.9e9;     <span class="comment">% Carrier frequency</span>
+fspl_points = linspace(dmin,dmax,100);
+lambda = physconst(<span class="string">'Lightspeed'</span>)/fc;
+fspl_ = fspl(fspl_points,lambda);
+
+<span class="comment">% TODO:  Create a scatter plot of plomni1 vs. dist1 on the links</span>
+<span class="comment">% for which there exists a path.  On the same plot, plot the FSPL.</span>
+<span class="comment">% Use semilogx to put the x axis in log scale.  Label the axes.</span>
+<span class="comment">% Add a legend.</span>
+figure;
+semilogx(distl(pathExistsl), plomni(pathExistsl),<span class="string">'x'</span>); hold <span class="string">on</span>;
+semilogx(fspl_points, fspl_, <span class="string">'o'</span>); grid <span class="string">on</span>;
+xlabel(<span class="string">'Distance [m]'</span>);
+ylabel(<span class="string">'Path Loss [dB]'</span>);
+legend(<span class="string">'Remcom Data'</span>,<span class="string">'FSPL'</span>, <span class="string">'Location'</span>, <span class="string">'northwest'</span>);
+title(<span class="string">'Path Loss vs Distance'</span>);
+</pre><img vspace="5" hspace="5" src="lab_prop_modeling_partial_03.png" alt=""> <h2 id="5">Classify points</h2><p>In many analyses of propagation models, it is useful to classify links as being in LOS, NLOS or outage.  Outage means there is no path.</p><pre class="codeinput"><span class="comment">% TODO:  Create a vector Ilink of size nrx*ntx x 1 where</span>
+<span class="comment">% linkState(i) = losLink = 1:   If the link has a LOS path</span>
+<span class="comment">% linkState(i) = nlosLink = 2:   If the link has only NLOS paths</span>
+<span class="comment">% linkState = nrx*ntx;</span>
+losLink = 0;
+nlosLink = 1;
+outage = 2;
+
+ref_Delay = distl./physconst(<span class="string">'Lightspeed'</span>) + 1e-9;
+Ilink = zeros(nrx*ntx,1);
+Ilink(minDlyl &gt; ref_Delay) = nlosLink;
+Ilink(pathExistsl == 0) = outage;
+
+<span class="comment">% TODO:  Print the fraction of the links in each of the three states</span>
+fprintf(1, <span class="string">'the fraction of links in LOS is = %.2f\n'</span>,sum(Ilink==losLink)/(nrx*ntx)*100);
+fprintf(1, <span class="string">'the fraction of links in NLOS is = %.2f\n'</span>,sum(Ilink==nlosLink)/(nrx*ntx)*100);
+fprintf(1, <span class="string">'the fraction of links in Outage is = %.2f\n'</span>,sum(Ilink==outage)/(nrx*ntx)*100);
+</pre><pre class="codeoutput">the fraction of links in LOS is = 14.20
+the fraction of links in NLOS is = 57.25
+the fraction of links in Outage is = 28.55
+</pre><h2 id="6">Plot the path loss vs. distance for the NLOS and LOS links</h2><p>To get an idea for the variation of the path loss vs. distance, we will now plot the omni path loss vs. distance separately for the LOS and NLOS points.  You should see that the LOS points are close to the FSPL, but the NLOS points have much higher path loss.</p><pre class="codeinput"><span class="comment">% TODO:  Create a scatter plot of the omni path loss vs. distance</span>
+<span class="comment">% using different markers for LOS and NLOS points.  On the same graph,</span>
+<span class="comment">% plot the FSPL.  Label the axes and add a legend.</span>
+figure;
+semilogx(distl(Ilink==losLink), plomni(Ilink==losLink),<span class="string">'x'</span>); hold <span class="string">on</span>;
+semilogx(distl(Ilink==nlosLink), plomni(Ilink==nlosLink),<span class="string">'s'</span>); hold <span class="string">on</span>;
+semilogx(fspl_points, fspl_, <span class="string">'o'</span>); grid <span class="string">on</span>;
+xlabel(<span class="string">'Distance [m]'</span>);
+ylabel(<span class="string">'Path Loss [dB]'</span>);
+legend(<span class="string">'Remcom: LOS'</span>,<span class="string">'Remcom: NLOS'</span>,<span class="string">'FSPL'</span>, <span class="string">'Location'</span>, <span class="string">'northwest'</span>);
+title(<span class="string">'Path Loss vs Distance'</span>);
+</pre><img vspace="5" hspace="5" src="lab_prop_modeling_partial_04.png" alt=""> <h2 id="7">Linear fit for the path loss model</h2><p>We will now fit a simple linear model of the form,</p><pre class="language-matlab">plomni = a + b*10*log10(dist) + xi,  xi <span class="string">~</span> <span class="string">N(0, sig^2)</span>
+</pre><p>MATLAB has some basic tools for performing simple model fitting like this. The tools are not as good as sklearn in python, but they are OK. In this case, you can read about the fitlm() command to find the coefficients (a,b) and sig for the LOS and NLOS models.  For sig, take the RMSE as the estimate, which is the root mean squared error.</p><pre class="codeinput"><span class="comment">% TODO:  Fit linear models for the LOS and NLOS cases</span>
+<span class="comment">% Print the parametrs (a,b,sig) for each model.</span>
+los_model = fitlm(10*log10(distl(Ilink==losLink)), plomni(Ilink==losLink));
+nlos_model = fitlm(10*log10(distl(Ilink==nlosLink)), plomni(Ilink==nlosLink));
+los_sigma = los_model.RMSE;
+nlos_sigma = nlos_model.RMSE;
+los_coeffs = los_model.Coefficients(:,{<span class="string">'Estimate'</span>}).Variables;
+nlos_coeffs = nlos_model.Coefficients(:,{<span class="string">'Estimate'</span>}).Variables;
+
+fprintf(<span class="string">'LOS Model: a = %.2f, b = %.2f, sigma = %.2f \n'</span>, los_coeffs(1), los_coeffs(2), los_sigma);
+fprintf(<span class="string">'NLOS MOdel: a = %.2f, b = %.2f, sigma = %.2f \n'</span>, nlos_coeffs(1), nlos_coeffs(2), nlos_sigma);
+
+<span class="comment">% TODO:  Plot the path loss vs. distance for the points for the LOS and</span>
+<span class="comment">% NLOS points as before along with the lines for the linear predicted</span>
+<span class="comment">% average path loss, a + b*10*log10(dist).</span>
+los_pred = los_coeffs(1) + los_coeffs(2)*10*log10(distl(Ilink==losLink)); <span class="comment">% + randn(sum(Ilink==losLink),1)*los_sigma;</span>
+nlos_pred = nlos_coeffs(1) + nlos_coeffs(2)*10*log10(distl(Ilink==nlosLink)); <span class="comment">% + randn(sum(Ilink==nlosLink),1)*nlos_sigma;</span>
+figure;
+semilogx(distl(Ilink==losLink), plomni(Ilink==losLink),<span class="string">'x'</span>); hold <span class="string">on</span>;
+semilogx(distl(Ilink==nlosLink), plomni(Ilink==nlosLink),<span class="string">'s'</span>); hold <span class="string">on</span>;
+semilogx(distl(Ilink==losLink),los_pred,<span class="string">'o'</span>); hold <span class="string">on</span>;
+semilogx(distl(Ilink==nlosLink),nlos_pred,<span class="string">'*'</span>); grid <span class="string">on</span>;
+xlabel(<span class="string">'Distance [m]'</span>);
+ylabel(<span class="string">'Path Loss [dB]'</span>);
+legend(<span class="string">'Remcom: LOS'</span>,<span class="string">'Remcom: NLOS'</span>,<span class="string">'LOS model'</span>,<span class="string">'NLOS model'</span>, <span class="string">'Location'</span>, <span class="string">'northwest'</span>);
+title(<span class="string">'Path Loss vs Distance'</span>);
+</pre><pre class="codeoutput">LOS Model: a = 35.36, b = 2.10, sigma = 4.78 
+NLOS MOdel: a = -8.72, b = 5.49, sigma = 16.07 
+</pre><img vspace="5" hspace="5" src="lab_prop_modeling_partial_05.png" alt=""> <h2 id="8">Plotting the link state</h2><p>The final part of the modeling is to understand the probability of a link state as a function of the distance.  To visualize this, divide the distances into bins with bin i being</p><pre>  [(i-1)*binwid, i*binwid],  i = 1,...,nbins</pre><p>We will create an array nbins x 3 arrays:</p><pre>  cnt(i,j) = number links whose distance is in bin i and linkState = j
+  cntnorm(i,j)
+           = cnt(i,j) / sum( cnt(i,:) )
+           = fraction of links whose distance is in bin i and linkState = j</pre><pre class="codeinput">nbins = 10;
+binwid = 50;
+binlim = [0,nbins*binwid];
+bincenter = ((0:nbins-1)' + 0.5)*binwid;
+
+<span class="comment">% TODO:  Compute cnt and cntnorm as above.  You may use the histcounts</span>
+<span class="comment">% function.</span>
+cnt = zeros(nbins,3);
+edges = 0:binwid:nbins*binwid;
+cnt(:,1) = histcounts(distl(Ilink==losLink), edges);
+cnt(:,2) = histcounts(distl(Ilink==nlosLink), edges);
+cnt(:,3) = histcounts(distl(Ilink==outage), edges);
+
+cntnorm = cnt./sum(cnt,2);
+
+<span class="comment">% TODO:  Plot cntnorm vs. bincenter using the bar() command with the</span>
+<span class="comment">% 'stacked' option.  Label the axes and add a legend</span>
+figure;
+bar(bincenter,cntnorm, <span class="string">'stacked'</span>);
+xlabel(<span class="string">'Distance [m]'</span>);
+legend(<span class="string">'LOS'</span>,<span class="string">'NLOS'</span>,<span class="string">'Outage'</span>);
+</pre><img vspace="5" hspace="5" src="lab_prop_modeling_partial_06.png" alt=""> <h2 id="9">Predicting the link state</h2><p>We conclude by fitting a simple model for the probability. We will use a simple multi-class logistic model where, for each link i, the relative probability that linkState(i) == j is given by:</p><pre class="language-matlab">log <span class="string">P(linkState(i) == j)/P(linkState(i) == 0)</span>
+    = -B(1,j)*dist1(i) - B(2,j)
+</pre><p>for j=1,2.  Here, B is the matrix of coefficients of the model.  So the probability that a link is in a state decays exponentially with distnace.  3GPP uses a slightly different model, but we use this model to make this simple.</p><p>Fitting logistic models is discussed in the ML class.  Here, we will use the MATLAB mnrfit routine.</p><pre class="codeinput"><span class="comment">% TODO:  Use the mnrfit() method to find the coefficients B.  You will need</span>
+<span class="comment">% to set the response variable to y = linkState + 1 since it expects class</span>
+<span class="comment">% labels starting at 1.</span>
+
+B = mnrfit(distl,Ilink+1);
+
+<span class="comment">% TODO:  Use the mnrval() method to predict the probabilties of each class</span>
+<span class="comment">% as a function of distance.</span>
+Phat = mnrval(B,distl);
+[~,yhat] = max(Phat,[],2);
+
+<span class="comment">% TODO:  Plot the probabilities as a function of the distance.</span>
+<span class="comment">% Label your graph.</span>
+phat_los = Phat(:,1);
+phat_nlos = Phat(:,2);
+phat_out = Phat(:,3);
+[sorted, idx] = sort(distl);
+figure;
+plot(sorted, phat_los(idx),sorted,phat_nlos(idx),sorted,phat_out(idx),<span class="string">'linewidth'</span>,2);
+grid <span class="string">on</span>; xlim([min(sorted),max(sorted)]);
+xlabel(<span class="string">'Distance [m]'</span>);
+ylabel(<span class="string">'Probability'</span>);
+legend(<span class="string">'LOS'</span>,<span class="string">'NLOS'</span>,<span class="string">'Outage'</span>, <span class="string">'location'</span>,<span class="string">'north'</span>,<span class="string">'orientation'</span>,<span class="string">'horizontal'</span>);
+</pre><img vspace="5" hspace="5" src="lab_prop_modeling_partial_07.png" alt=""> <h2 id="10">Compare the link state</h2><p>Finally, to compare the predicted probabilties with the measured valued, plot the probabilities as a function of the distance on top of the bar graph in a way to see if they are aligned. You should see a good fit</p><pre class="codeinput">figure;
+bar(bincenter,cntnorm, <span class="string">'stacked'</span>); hold <span class="string">on</span>;
+I = (distl &lt;= 500);
+distl_r = distl(I); phat_los_r = phat_los(I);phat_nlos_r = phat_nlos(I);
+[sorted_r,idx_r] = sort(distl_r);
+plot(sorted_r, phat_los_r(idx_r),<span class="string">'linewidth'</span>,2); hold <span class="string">on</span>;
+plot(sorted_r, phat_los_r(idx_r)+phat_nlos_r(idx_r),<span class="string">'linewidth'</span>,2);
+xlabel(<span class="string">'Distance [m]'</span>);
+legend(<span class="string">'LOS'</span>,<span class="string">'NLOS'</span>,<span class="string">'Outage'</span>,<span class="string">'LOS Pred'</span>,<span class="string">'LOS+NLOS Pred'</span>);
+</pre><img vspace="5" hspace="5" src="lab_prop_modeling_partial_08.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Lab:  Fitting Propagation Models from Ray Tracing Data
+% Ray tracing is a widely-used method for predicting wireless coverage
+% in complex indoor and outdoor environments.  Ray tracers take a 3D model
+% of some region along with locations of transmitters and can predict the
+% path characteristics from the transmitter locations to specified receiver
+% locations.  Ray tracing requires certain assumptions (such as building 
+% materials to make the material), so they may not be exact.  Nevertheless,
+% they provide an excellent approximation and are often used by cellular 
+% carriers to select sites for deploying cells.  In this lab, we will use 
+% ray tracing outputs to generate a collection of path data from which 
+% we can fit analytic models.  Ray tracing can provide much more data than
+% would be possible with time-consuming real measurements.
+% 
+% In going through this data, you will learn to:
+% 
+% * Load and describe ray tracing data produced from a commercial ray
+%   tracing tool
+% * Compute the omni-directional path loss from the ray tracing data
+% * Determine if links are in outage (no path), LOS or NLOS
+% * Visualize the path loss and link state as a function of distance
+% * Fit simple models for the path loss and link state using machine
+%   learning tools
+%
+% *Submission*:  Complete all the sections marked |TODO|, and run the cells 
+% to make sure your scipt is working.  When you are satisfied with the 
+% results,  <https://www.mathworks.com/help/matlab/matlab_prog/publishing-matlab-code.html
+% publish your code> to generate an html file.  Print the html file to
+% PDF and submit the PDF.
+
+
+
+%% Data from Remcom
+% The data is in this lab was created by NYU MS student Sravan Chintareddy
+% and Research Scientist Marco Mezzavilla.  They used a widely-used and
+% powerful commercial ray tracer from  <https://www.remcom.com/ Remcom>.
+% Remcom is one of the best ray tracing tools in the industry.  Although 
+% we will illustrate the concepts at 1.9 GHz carrier, the Remcomm tool is
+% particularly excellent for mmWave studies.  Remcom has generously 
+% provided their software to NYU for purpose of generating the data for 
+% this lab and other research.  
+%
+% The data was in this lab comes from a simulation of a section of 
+% Reston, VA. In this simulation, a number of transmitters were placed in
+% the area in location similar to possible micro-cellular sites.  The
+% receivers were placed on street levels similar to pedestrians (UEs).  
+% We can plot the area and the sites with the following.
+A = imread('map.png');
+imshow(A, 'InitialMagnification', 40);
+
+%% Loading the data
+% We can load the data with the following command.
+% This will create three variables in your workspace.
+% 
+% *  txpos:   A trx x 3 array of the positions of the transmitters
+% *  rxpos:   An nrx x 3 array of the positions of the receivers
+% *  pathTable:  A table of all the paths 
+load pathData;
+
+% TODO:  Find nrx, ntx and npath
+nrx = size(rxpos,1);
+ntx = size(txpos,1);
+npath = size(pathTable,1);
+
+fprintf(1, 'number of receivers = %.2f\n', nrx);
+fprintf(1, 'number of transmitters = %.2f\n', ntx);
+fprintf(1, 'number of paths = %.2f\n', npath);
+
+% TODO:  Plot the locations  of the TX and RX on the x-y plane.
+% You can ignore the z coordinate of both in the plot.  Use different 
+% markers (e.g. 'o' and 's' for the TX and RXs).
+figure;
+plot(txpos(:,1), txpos(:,2), 'o'); hold on;
+plot(rxpos(:,1), rxpos(:,2), 's'); grid on;
+ylabel('m','fontsize',12); xlabel('m', 'fontsize',12);
+title('Transmitters and Receivers locations');
+legend('TXs','RXs', 'Location', 'southoutside','orientation','horizontal');
+
+%% Determine omni-directional path loss and minimum path delay
+% The table, pathTable, has one row for each path found in the ray tracer.  
+% Each path has a TXID and RXID and key statistics like the RX power 
+% and delay.  Due to multi-path, a (TXID,RXID) pair may have more than 
+% one path.
+
+% TODO:  Use the head command to print the first few rows of the path
+% table.  
+disp(head(pathTable,5));
+
+% TODO:  Loop through the paths and create the following arrays,
+% such that for each RXID i and TXID j:
+%    pathExists(i,j) = 1 if there exists at least one path
+%    totRx(i,j) = total RX power in linear scale
+%    minDly(i,j) = minimum path delay (taken from the toa_sec column)
+txIDs = int32(pathTable(:,{'TXID'}).Variables);
+rxIDs = pathTable(:,{'RXID'}).Variables;
+rxPowers = pathTable(:,{'rx_power_dbm'}).Variables;
+delays = pathTable(:,{'toa_sec'}).Variables;
+maxTXID = max(txIDs);
+maxRXID = max(rxIDs);
+
+pathExists = zeros(nrx,ntx);
+totRx = zeros(nrx,ntx);
+minDly = 100*ones(nrx,ntx);
+for p = 1:npath
+    pathExists(rxIDs(p),txIDs(p)) = 1;
+    totRx(rxIDs(p),txIDs(p)) = totRx(rxIDs(p),txIDs(p)) + db2pow(rxPowers(p)); 
+    minDly(rxIDs(p),txIDs(p)) = min(minDly(rxIDs(p),txIDs(p)), delays(p));
+end
+
+% TODO:  For each link (i,j), compute the omni-directional path loss, 
+% which is defined as the txPowdBm - total received power (dBm).
+% In this dataset, txPowdBm = 36
+txPowdBm = 36;
+plomni = txPowdBm - pow2db(totRx);
+
+%% Plot the path loss vs. distance
+% Just to get an idea of the path losses, we plot the omni directional path
+% losses as a function of distance and compare against the FSPL.
+
+
+% TODO:  Using the arrays rxpos and txpos, compute
+%   dist(i,j) = distance between RX i and TX j in meters.
+% Do this without for loops.
+x_dist = rxpos(:,1) - txpos(:,1)';
+y_dist = rxpos(:,2) - txpos(:,2)';
+z_dist = rxpos(:,3) - txpos(:,3)';
+dist = sqrt(x_dist.^2 + y_dist.^2 + z_dist.^2);
+
+% At this point, you should have nrx x ntx matrices such as dist, 
+% plomni, minDly and pathExists.  For the subsequent analysis, it is 
+% useful to convert these to nrx*ntx x 1 vectors. 
+% 
+% TODO:  Convert dist, plomni, minDly and pathExists to vectors
+% dist1, plomni1, ...
+distl = reshape(dist,[nrx*ntx,1]);
+plomnil = reshape(plomni,[nrx*ntx,1]);
+minDlyl = reshape(minDly,[nrx*ntx,1]);
+pathExistsl = logical(reshape(pathExists,[nrx*ntx,1]));
+
+% TODO:  Compute the free-space path loss for 100 points from dmin to dmax.
+% Use the fspl() command.
+dmin = 10;
+dmax = 500;
+fc = 1.9e9;     % Carrier frequency
+fspl_points = linspace(dmin,dmax,100);
+lambda = physconst('Lightspeed')/fc;
+fspl_ = fspl(fspl_points,lambda);
+
+% TODO:  Create a scatter plot of plomni1 vs. dist1 on the links
+% for which there exists a path.  On the same plot, plot the FSPL.
+% Use semilogx to put the x axis in log scale.  Label the axes.
+% Add a legend.
+figure;
+semilogx(distl(pathExistsl), plomni(pathExistsl),'x'); hold on;
+semilogx(fspl_points, fspl_, 'o'); grid on;
+xlabel('Distance [m]');
+ylabel('Path Loss [dB]');
+legend('Remcom Data','FSPL', 'Location', 'northwest');
+title('Path Loss vs Distance');
+
+%% Classify points
+% In many analyses of propagation models, it is useful to classify links as
+% being in LOS, NLOS or outage.  Outage means there is no path.
+
+% TODO:  Create a vector Ilink of size nrx*ntx x 1 where
+% linkState(i) = losLink = 1:   If the link has a LOS path
+% linkState(i) = nlosLink = 2:   If the link has only NLOS paths
+% linkState = nrx*ntx;
+losLink = 0;
+nlosLink = 1;
+outage = 2;
+
+ref_Delay = distl./physconst('Lightspeed') + 1e-9;
+Ilink = zeros(nrx*ntx,1);
+Ilink(minDlyl > ref_Delay) = nlosLink;
+Ilink(pathExistsl == 0) = outage;
+
+% TODO:  Print the fraction of the links in each of the three states
+fprintf(1, 'the fraction of links in LOS is = %.2f\n',sum(Ilink==losLink)/(nrx*ntx)*100);
+fprintf(1, 'the fraction of links in NLOS is = %.2f\n',sum(Ilink==nlosLink)/(nrx*ntx)*100);
+fprintf(1, 'the fraction of links in Outage is = %.2f\n',sum(Ilink==outage)/(nrx*ntx)*100);
+
+%% Plot the path loss vs. distance for the NLOS and LOS links
+% To get an idea for the variation of the path loss vs. distance, 
+% we will now plot the omni path loss vs. distance separately for the LOS
+% and NLOS points.  You should see that the LOS points are close to the
+% FSPL, but the NLOS points have much higher path loss.
+
+% TODO:  Create a scatter plot of the omni path loss vs. distance 
+% using different markers for LOS and NLOS points.  On the same graph,
+% plot the FSPL.  Label the axes and add a legend.
+figure;
+semilogx(distl(Ilink==losLink), plomni(Ilink==losLink),'x'); hold on;
+semilogx(distl(Ilink==nlosLink), plomni(Ilink==nlosLink),'s'); hold on;
+semilogx(fspl_points, fspl_, 'o'); grid on;
+xlabel('Distance [m]');
+ylabel('Path Loss [dB]');
+legend('Remcom: LOS','Remcom: NLOS','FSPL', 'Location', 'northwest');
+title('Path Loss vs Distance');
+
+%% Linear fit for the path loss model
+% We will now fit a simple linear model of the form,
+%
+%   plomni = a + b*10*log10(dist) + xi,  xi ~ N(0, sig^2)
+%
+% MATLAB has some basic tools for performing simple model fitting like this.
+% The tools are not as good as sklearn in python, but they are OK.  
+% In this case, you can read about the fitlm() command to find the 
+% coefficients (a,b) and sig for the LOS and NLOS models.  For sig, take
+% the RMSE as the estimate, which is the root mean squared error.
+
+
+% TODO:  Fit linear models for the LOS and NLOS cases
+% Print the parametrs (a,b,sig) for each model.
+los_model = fitlm(10*log10(distl(Ilink==losLink)), plomni(Ilink==losLink));
+nlos_model = fitlm(10*log10(distl(Ilink==nlosLink)), plomni(Ilink==nlosLink));
+los_sigma = los_model.RMSE;
+nlos_sigma = nlos_model.RMSE;
+los_coeffs = los_model.Coefficients(:,{'Estimate'}).Variables;
+nlos_coeffs = nlos_model.Coefficients(:,{'Estimate'}).Variables;
+
+fprintf('LOS Model: a = %.2f, b = %.2f, sigma = %.2f \n', los_coeffs(1), los_coeffs(2), los_sigma);
+fprintf('NLOS MOdel: a = %.2f, b = %.2f, sigma = %.2f \n', nlos_coeffs(1), nlos_coeffs(2), nlos_sigma);
+
+% TODO:  Plot the path loss vs. distance for the points for the LOS and
+% NLOS points as before along with the lines for the linear predicted
+% average path loss, a + b*10*log10(dist).
+los_pred = los_coeffs(1) + los_coeffs(2)*10*log10(distl(Ilink==losLink)); % + randn(sum(Ilink==losLink),1)*los_sigma;
+nlos_pred = nlos_coeffs(1) + nlos_coeffs(2)*10*log10(distl(Ilink==nlosLink)); % + randn(sum(Ilink==nlosLink),1)*nlos_sigma;
+figure;
+semilogx(distl(Ilink==losLink), plomni(Ilink==losLink),'x'); hold on;
+semilogx(distl(Ilink==nlosLink), plomni(Ilink==nlosLink),'s'); hold on;
+semilogx(distl(Ilink==losLink),los_pred,'o'); hold on;
+semilogx(distl(Ilink==nlosLink),nlos_pred,'*'); grid on;
+xlabel('Distance [m]');
+ylabel('Path Loss [dB]');
+legend('Remcom: LOS','Remcom: NLOS','LOS model','NLOS model', 'Location', 'northwest');
+title('Path Loss vs Distance');
+
+%% Plotting the link state
+% The final part of the modeling is to understand the probability of a link
+% state as a function of the distance.  To visualize this, divide
+% the distances into bins with bin i being 
+%
+%    [(i-1)*binwid, i*binwid],  i = 1,...,nbins
+%
+% We will create an array nbins x 3 arrays:
+%
+%    cnt(i,j) = number links whose distance is in bin i and linkState = j
+%    cntnorm(i,j) 
+%             = cnt(i,j) / sum( cnt(i,:) )
+%             = fraction of links whose distance is in bin i and linkState = j
+nbins = 10;
+binwid = 50;
+binlim = [0,nbins*binwid];
+bincenter = ((0:nbins-1)' + 0.5)*binwid;
+
+% TODO:  Compute cnt and cntnorm as above.  You may use the histcounts 
+% function.
+cnt = zeros(nbins,3);
+edges = 0:binwid:nbins*binwid;
+cnt(:,1) = histcounts(distl(Ilink==losLink), edges);
+cnt(:,2) = histcounts(distl(Ilink==nlosLink), edges);
+cnt(:,3) = histcounts(distl(Ilink==outage), edges);
+
+cntnorm = cnt./sum(cnt,2);
+
+% TODO:  Plot cntnorm vs. bincenter using the bar() command with the 
+% 'stacked' option.  Label the axes and add a legend
+figure;
+bar(bincenter,cntnorm, 'stacked');
+xlabel('Distance [m]');
+legend('LOS','NLOS','Outage');
+
+%% Predicting the link state
+% We conclude by fitting a simple model for the probability.
+% We will use a simple multi-class logistic model where, for each link i,
+% the relative probability that linkState(i) == j is given by:
+%
+%   log P(linkState(i) == j)/P(linkState(i) == 0) 
+%       = -B(1,j)*dist1(i) - B(2,j)
+%
+% for j=1,2.  Here, B is the matrix of coefficients of the model.  So 
+% the probability that a link is in a state decays exponentially with
+% distnace.  3GPP uses a slightly different model, but we use this model to
+% make this simple.  
+%
+% Fitting logistic models is discussed in the ML class.  Here, we will use
+% the MATLAB mnrfit routine.  
+
+% TODO:  Use the mnrfit() method to find the coefficients B.  You will need
+% to set the response variable to y = linkState + 1 since it expects class
+% labels starting at 1.
+
+B = mnrfit(distl,Ilink+1);
+
+% TODO:  Use the mnrval() method to predict the probabilties of each class
+% as a function of distance.
+Phat = mnrval(B,distl);
+[~,yhat] = max(Phat,[],2);
+
+% TODO:  Plot the probabilities as a function of the distance.
+% Label your graph.
+phat_los = Phat(:,1);
+phat_nlos = Phat(:,2);
+phat_out = Phat(:,3);
+[sorted, idx] = sort(distl);
+figure;
+plot(sorted, phat_los(idx),sorted,phat_nlos(idx),sorted,phat_out(idx),'linewidth',2);
+grid on; xlim([min(sorted),max(sorted)]);
+xlabel('Distance [m]');
+ylabel('Probability');
+legend('LOS','NLOS','Outage', 'location','north','orientation','horizontal');
+
+%% Compare the link state
+% Finally, to compare the predicted probabilties with the measured valued,
+% plot the probabilities as a function of the distance on top of the bar
+% graph in a way to see if they are aligned. You should see a good fit
+figure;
+bar(bincenter,cntnorm, 'stacked'); hold on;
+I = (distl <= 500);
+distl_r = distl(I); phat_los_r = phat_los(I);phat_nlos_r = phat_nlos(I);
+[sorted_r,idx_r] = sort(distl_r);
+plot(sorted_r, phat_los_r(idx_r),'linewidth',2); hold on;
+plot(sorted_r, phat_los_r(idx_r)+phat_nlos_r(idx_r),'linewidth',2);
+xlabel('Distance [m]');
+legend('LOS','NLOS','Outage','LOS Pred','LOS+NLOS Pred');
+
+##### SOURCE END #####
+--></body></html>
