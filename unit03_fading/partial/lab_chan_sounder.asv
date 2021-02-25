@@ -232,7 +232,7 @@ x0_nFrame = repmat(x0,nframe,1);
 % TODO:  Use this syntax to construct a SISOMPChan object with the sample
 % rate, path delays, path Doppler and directional gains for the channel
 
-chan = SISOMPChan('fsamp',fsamp,'gain',gainDir,'dly',dly,'dop',dopp,'fc',fc);
+chan = SISOMPChan('fsamp',fsamp,'gain',gainDir,'dly',dly,'dop',dopp);
 
 %% Implementing the channel
 % The SIMOMPChan object derives from the matlab.System class and should
@@ -246,7 +246,7 @@ chan = SISOMPChan('fsamp',fsamp,'gain',gainDir,'dly',dly,'dop',dopp,'fc',fc);
 % TODO:  Complete the implementations of each of these meth
 
 % TODO:  Run the data through the step. 
-y0 = chan.step(x0_nFrame);
+y0 = chan.step(x0_nFrame)
 
 % TODO:  Add noise 20 dB below the y
 

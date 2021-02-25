@@ -20,6 +20,7 @@ classdef ElemWithAxes < matlab.System
         
         % Frequency in Hz
         fc = 28e9;
+        vc = physconst('lightspeed');
         
         % Directivity interpolant
         dirInterp = [];
@@ -36,17 +37,22 @@ classdef ElemWithAxes < matlab.System
             
             % TODO:  Assign fc and ant to the class variables
             % obj.fc and obj.ant
+            obj.fc = fc;
+            obj.ant = ant;
         end
         
         function alignAxes(obj,az,el)
             % Aligns the axes to given az and el angles
             
             % TODO:  Set the axesAz and axesEl to az and el
+            obj.axesAz = az;
+            obj.axesEl = el;
             
             % TODO:  Use the azelaxes() function to create a 3 x 3 array
             % corresponding to an orthonormal basis for the local
             % coordinate system of the array aligned in the direction
             % (az,el).  Save this in the axesLoc property.
+            obj.axesLoc = azelaxes(obj.axesAz, obj.axesEl);
         end
         
         function dop = doppler(obj,az,el)
@@ -57,12 +63,14 @@ classdef ElemWithAxes < matlab.System
             % TODO:  Use the sph2cart method to find unit vectors in the
             % direction of each path.  That is, create an array where 
             % u(:,i) is a unit vector in the angle (az(i), el(i)).
-            % Remember to convert from degrees to radians!            
-            
+            % Remember to convert from degrees to radians!
+            [x,y,z] = sph2cart(deg2rad(az),deg2rad(el),ones(size(az)));
+            u = [x',y',z']';
             % TODO:  Compute the Doppler shift of each path from the
             % velocity vector, obj.vel.  The Doppler shift of path i is
             %     dop(i) = vel*u(:,i)*fc/vc, 
             % where vc = speed of light
+            dop = obj.vel*u*(obj.fc/obj.vc);
         end
         
     end
@@ -73,29 +81,30 @@ classdef ElemWithAxes < matlab.System
             % We will use this point to interpolator
             
             % TODO:  Get the pattern from ant.pattern
+            [dir,az,el] = obj.ant.pattern(obj.fc, 'Type', 'Directivity');
             
             % TODO:  Create the gridded interpolant object.  You can follow
             % the demo in the antennas lecture
-            %     obj.dirInterp = griddedInterpolant(...)
+            %     obj.dirInterp = griddedInterpolant(...) 
+            obj.dirInterp = griddedInterpolant({el,az},dir);
             
-            
-            
-            
-        end
+         end
+        
         function dir = stepImpl(obj, az, el)
             % Computes the directivity along az and el angles
             % The angles are given in the global frame of reference
             % We do this by first rotating the angles into the local axes
-           
-          
             
             % TODO:  Use the global2localcoord function to translate 
             % the gloabl angles (az(i), el(i)) into angles
             % (azLoc(i),elLoc(i)) in the local coordinate system.  use
             % the 'ss' option along with the local axes obj.axesLoc.
-            
+            locCoord = global2localcoord([az; el; ones(size(az));],'ss',[0;0;0],obj.axesLoc);
+            azLoc = locCoord(1,:);
+            elLoc = locCoord(2,:);
             % TODO:  Run the interplationn object to compute the directivity
             % in the local angles
+            dir = obj.dirInterp(elLoc,azLoc);
             
         end
         

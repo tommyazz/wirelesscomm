@@ -89,8 +89,8 @@ classdef SISOMPChan < matlab.System
             nsamp = length(x);
             tot = (nsamp+1) / obj.fsamp;
             t = linspace(0,tot,nsamp+1)';
-            phase = obj.phaseInit + 2*pi*obj.fc*obj.dly + 2*pi*t*obj.dop;
-    
+            phase = 2*pi*t*obj.dop;
+            % obj.phaseInit + 2*pi*obj.fc*obj.dly +
             % TODO:  Save the final phase, phase(nsamp+1,:)
             % as phaseInit for the next step.
             obj.phaseInit = phase(nsamp+1,:);
