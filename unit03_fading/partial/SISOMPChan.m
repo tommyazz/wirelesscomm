@@ -79,7 +79,7 @@ classdef SISOMPChan < matlab.System
              
             % TODO:  Use the fracDly object to compute delayed versions of
             % the input x.
-            xdly = obj.fracDly.step(x,dlySamp);
+            xdly = obj.fracDly(x,dlySamp);
             % The resulting xdly should be nsamp x npath.
             
             % TODO:  Using the Doppler shifts, compute the phase rotations 
@@ -87,27 +87,16 @@ classdef SISOMPChan < matlab.System
             % (nsamp+1) x npath matrix 
             %     phase(i,k) = phase rotation on sample i and path k
             nsamp = length(x);
-            tot = (nsamp+1) / obj.fsamp;
-            t = linspace(0,tot,nsamp+1)';
-            phase = obj.phaseInit + 2*pi*obj.fc*obj.dly + 2*pi*t*obj.dop;
-    
+            t = ((0:nsamp)/obj.fsamp)';
+            phase =  (t*obj.dop')*2*pi;
+            % 2*pi*obj.fc*obj.dly
             % TODO:  Save the final phase, phase(nsamp+1,:)
             % as phaseInit for the next step.
             obj.phaseInit = phase(nsamp+1,:);
             
             % TODO:  Apply the phases and gain to each path, add the
             % resutls and store in y.
-            H = exp(1i*phase(1:end-1,:)).*gainLin;
-            y = sum(H.*xdly,2);
-            
-%             for i = 1:npath
-%                 % Compute the phase.  Note the use of python-like 
-%                 % broadcasting
-%                 phase = 2*pi*fd(i)*t + 2*pi*dly(i)*f' + phi(i);
-% 
-%                 % Add the path
-%                 H = H + 10^(-0.05*gaindB(i))*exp(1i*phase);
-%             end
+            y = sum(exp(1i*phase(1:end-1,:)).*xdly.*gainLin,2);
         end
     end
 end

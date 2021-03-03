@@ -1,0 +1,290 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>SISOMPChan</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-03-02"><meta name="DC.source" content="SISOMPChan.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">classdef</span> SISOMPChan &lt; matlab.System
+    <span class="comment">% SISOMPChan:  SISO multi-path fading channel</span>
+    <span class="keyword">properties</span>
+        fsamp;   <span class="comment">% Sample rate in Hz</span>
+
+        <span class="comment">% Path properties</span>
+        gain;  <span class="comment">% path gains in dB</span>
+        dly;   <span class="comment">% delays in seconds</span>
+        dop;   <span class="comment">% doppler shift of each path in Hz</span>
+        fc;    <span class="comment">% the frequency</span>
+
+        <span class="comment">% Fractional delay object</span>
+        fracDly;
+
+        <span class="comment">% Initial set of phases for the next step call</span>
+        phaseInit;
+
+    <span class="keyword">end</span>
+
+    <span class="keyword">methods</span>
+        <span class="keyword">function</span> obj = SISOMPChan(varargin)
+            <span class="comment">% Constructor:</span>
+            <span class="comment">% The syntax allows you to call the constructor with syntax of</span>
+            <span class="comment">% the form:</span>
+            <span class="comment">%</span>
+            <span class="comment">%     chan = SISOMPChan('Prop1', Val1, 'Prop2', val2, ...);</span>
+            <span class="keyword">if</span> nargin &gt;= 1
+                obj.set(varargin{:});
+            <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+    <span class="keyword">methods</span> (Access = protected)
+        <span class="keyword">function</span> setupImpl(obj)
+              <span class="comment">% setup:  This is called before the first step.</span>
+              <span class="comment">% For the SISO MP channel, we will use this point to</span>
+              <span class="comment">% construct the fractional delay object.</span>
+
+              <span class="comment">% TODO:  Create a dsp.VariableFractionalDelay object</span>
+              <span class="comment">% and store it is fracDly.  Use the parameters</span>
+              <span class="comment">%  'InterpolationMethod', 'Farrow',</span>
+              <span class="comment">%  'FilterLength',8</span>
+              <span class="comment">%  'FarrowSmallDelayAction','Use off-centered kernel',...</span>
+              <span class="comment">%  'MaximumDelay', 1024</span>
+              obj.fracDly = dsp.VariableFractionalDelay(<span class="keyword">...</span>
+                            <span class="string">'InterpolationMethod'</span>, <span class="string">'Farrow'</span>,<span class="string">'FilterLength'</span>,8,<span class="keyword">...</span>
+                            <span class="string">'FarrowSmallDelayAction'</span>,<span class="string">'Use off-centered kernel'</span>,<span class="keyword">...</span>
+                            <span class="string">'MaximumDelay'</span>, 1024);
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> resetImpl(obj)
+            <span class="comment">% reset:  Called on the first step after reset or release.</span>
+
+            <span class="comment">% TODO:  Reset the fracDly object</span>
+            reset(obj.fracDly);
+
+            <span class="comment">% TODO:  Initialize phases, phaseInit, to a row vector of</span>
+            <span class="comment">% dimension equal to the number of paths with uniform values</span>
+            <span class="comment">% from 0 to 2pi</span>
+            obj.phaseInit = rand(size(obj.gain))*2*pi;
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> releaseImpl(obj)
+            <span class="comment">% release:  Called after the release method</span>
+
+            <span class="comment">% TODO:  Release the fracDly object</span>
+            release(obj.fracDly);
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> y = stepImpl(obj, x)
+            <span class="comment">% step:  Run a vector of samples through the channel</span>
+
+            <span class="comment">% TODO:  Compute the delay in samples</span>
+            dlySamp = obj.dly.*obj.fsamp;
+
+            <span class="comment">% TODO:  Compute gain of each path in linear scale</span>
+            gainLin = db2pow(obj.gain);
+
+            <span class="comment">% TODO:  Use the fracDly object to compute delayed versions of</span>
+            <span class="comment">% the input x.</span>
+            xdly = obj.fracDly(x,dlySamp);
+            <span class="comment">% The resulting xdly should be nsamp x npath.</span>
+
+            <span class="comment">% TODO:  Using the Doppler shifts, compute the phase rotations</span>
+            <span class="comment">% on each path.  Specifically, if nsamp = length(x), create a</span>
+            <span class="comment">% (nsamp+1) x npath matrix</span>
+            <span class="comment">%     phase(i,k) = phase rotation on sample i and path k</span>
+            nsamp = length(x);
+            t = ((0:nsamp)/obj.fsamp)';
+            phase =  (t*obj.dop')*2*pi;
+            <span class="comment">% 2*pi*obj.fc*obj.dly</span>
+            <span class="comment">% TODO:  Save the final phase, phase(nsamp+1,:)</span>
+            <span class="comment">% as phaseInit for the next step.</span>
+            obj.phaseInit = phase(nsamp+1,:);
+
+            <span class="comment">% TODO:  Apply the phases and gain to each path, add the</span>
+            <span class="comment">% resutls and store in y.</span>
+            y = sum(exp(1i*phase(1:end-1,:)).*xdly.*gainLin,2);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  SISOMPChan with properties:
+
+        fsamp: []
+         gain: []
+          dly: []
+          dop: []
+           fc: []
+      fracDly: []
+    phaseInit: []
+
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef SISOMPChan < matlab.System
+    % SISOMPChan:  SISO multi-path fading channel    
+    properties 
+        fsamp;   % Sample rate in Hz
+                
+        % Path properties
+        gain;  % path gains in dB
+        dly;   % delays in seconds
+        dop;   % doppler shift of each path in Hz
+        fc;    % the frequency
+        
+        % Fractional delay object
+        fracDly;
+       
+        % Initial set of phases for the next step call
+        phaseInit;
+                                
+    end
+    
+    methods 
+        function obj = SISOMPChan(varargin)
+            % Constructor:  
+            % The syntax allows you to call the constructor with syntax of
+            % the form:
+            %
+            %     chan = SISOMPChan('Prop1', Val1, 'Prop2', val2, ...);
+            if nargin >= 1
+                obj.set(varargin{:});
+            end
+            
+        end
+        
+    end
+    methods (Access = protected)
+        function setupImpl(obj)
+              % setup:  This is called before the first step.
+              % For the SISO MP channel, we will use this point to
+              % construct the fractional delay object.  
+              
+              % TODO:  Create a dsp.VariableFractionalDelay object 
+              % and store it is fracDly.  Use the parameters
+              %  'InterpolationMethod', 'Farrow',
+              %  'FilterLength',8
+              %  'FarrowSmallDelayAction','Use off-centered kernel',...
+              %  'MaximumDelay', 1024   
+              obj.fracDly = dsp.VariableFractionalDelay(...
+                            'InterpolationMethod', 'Farrow','FilterLength',8,...
+                            'FarrowSmallDelayAction','Use off-centered kernel',...
+                            'MaximumDelay', 1024);
+        end
+        
+        function resetImpl(obj)
+            % reset:  Called on the first step after reset or release.
+            
+            % TODO:  Reset the fracDly object
+            reset(obj.fracDly);
+            
+            % TODO:  Initialize phases, phaseInit, to a row vector of 
+            % dimension equal to the number of paths with uniform values 
+            % from 0 to 2pi
+            obj.phaseInit = rand(size(obj.gain))*2*pi;
+        end
+        
+        function releaseImpl(obj)
+            % release:  Called after the release method
+            
+            % TODO:  Release the fracDly object
+            release(obj.fracDly);
+        end
+        
+        function y = stepImpl(obj, x)
+            % step:  Run a vector of samples through the channel
+                  
+            % TODO:  Compute the delay in samples
+            dlySamp = obj.dly.*obj.fsamp;
+            
+            % TODO:  Compute gain of each path in linear scale
+            gainLin = db2pow(obj.gain);
+             
+            % TODO:  Use the fracDly object to compute delayed versions of
+            % the input x.
+            xdly = obj.fracDly(x,dlySamp);
+            % The resulting xdly should be nsamp x npath.
+            
+            % TODO:  Using the Doppler shifts, compute the phase rotations 
+            % on each path.  Specifically, if nsamp = length(x), create a
+            % (nsamp+1) x npath matrix 
+            %     phase(i,k) = phase rotation on sample i and path k
+            nsamp = length(x);
+            t = ((0:nsamp)/obj.fsamp)';
+            phase =  (t*obj.dop')*2*pi;
+            % 2*pi*obj.fc*obj.dly
+            % TODO:  Save the final phase, phase(nsamp+1,:)
+            % as phaseInit for the next step.
+            obj.phaseInit = phase(nsamp+1,:);
+            
+            % TODO:  Apply the phases and gain to each path, add the
+            % resutls and store in y.
+            y = sum(exp(1i*phase(1:end-1,:)).*xdly.*gainLin,2);
+        end
+    end
+end
+##### SOURCE END #####
+--></body></html>

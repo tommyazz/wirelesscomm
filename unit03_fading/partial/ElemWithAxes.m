@@ -65,12 +65,12 @@ classdef ElemWithAxes < matlab.System
             % u(:,i) is a unit vector in the angle (az(i), el(i)).
             % Remember to convert from degrees to radians!
             [x,y,z] = sph2cart(deg2rad(az),deg2rad(el),ones(size(az)));
-            u = [x',y',z']';
+            u = [x; y; z]';
             % TODO:  Compute the Doppler shift of each path from the
             % velocity vector, obj.vel.  The Doppler shift of path i is
             %     dop(i) = vel*u(:,i)*fc/vc, 
             % where vc = speed of light
-            dop = obj.vel*u*(obj.fc/obj.vc);
+            dop = u*obj.vel*(obj.fc/obj.vc);
         end
         
     end

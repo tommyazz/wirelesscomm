@@ -176,6 +176,7 @@ figure;
 stem(dly*1e9,gain,'BaseValue',-40, 'MarkerFaceColor','blue','MarkerEdgeColor','blue');
 hold on;
 stem(dly*1e9,gainDir,'BaseValue',-40, 'MarkerFaceColor','green','MarkerEdgeColor','green');
+hold off;
 ylabel('Path Gain [dB]');
 xlabel('Path Delay [ns]');
 grid on;
@@ -190,7 +191,7 @@ title('Path gain vs Delay for each multi-path: w/wout directivity gain');
 % TODO:  Use the elemUE.set() method to set the mobile velocity to 100 km/h
 % in the y-direction.  Remember to convert from km/h to m/s.
 vkmh = 100;
-elemUE.set('vel', convvel([0,vkmh,0],'km/h','m/s'));
+elemUE.set('vel', convvel([0;vkmh;0],'km/h','m/s'));
 
 % TODO:  Call the elemUE.doppler() method to find the doppler shifts of all
 % the paths based on the angle of arrivals
@@ -232,7 +233,7 @@ x0_nFrame = repmat(x0,nframe,1);
 % TODO:  Use this syntax to construct a SISOMPChan object with the sample
 % rate, path delays, path Doppler and directional gains for the channel
 
-chan = SISOMPChan('fsamp',fsamp,'gain',gainDir,'dly',dly,'dop',dopp,'fc',fc);
+chan = SISOMPChan('fsamp',fsamp,'gain',gainDir,'dly',dly,'dop',dopp);
 
 %% Implementing the channel
 % The SIMOMPChan object derives from the matlab.System class and should
@@ -247,34 +248,58 @@ chan = SISOMPChan('fsamp',fsamp,'gain',gainDir,'dly',dly,'dop',dopp,'fc',fc);
 
 % TODO:  Run the data through the step. 
 y0 = chan.step(x0_nFrame);
-
+ 
 % TODO:  Add noise 20 dB below the y
-
+snr = 20;
+ynoisy = awgn(y0,snr,'measured');
 
 %% Estimating the channel in frequency domain
 % We will now perform a simple channel estimate in frequency-domain
 
 % TODO:  Reshape ynoisy into a nfft x nframes matrix and take the FFT of
 % each column.  Store the results in yfd.
-
+ynoisy_r = reshape(ynoisy,[nfft,nframe]);
+yfd = fft(ynoisy_r,[],1);
 
 % TODO:  Estimate the frequency domain channel by dividing each frame of
 % yfd by the transmitted frequency domain symbols x0Fd.  Store the results
 % in hestFd
+hestFd = yfd./x0Fd;
 
 % TODO:  Plot the estimated channel magnitude in dB.  Label the axes in
 % time and frequency
+figure;
+% f = (0:nfft-1)*fsamp/nfft;
+% t = (0:nfft-1)/fsamp;
+f = fc-fsamp/2:fsamp/nfft:fc+fsamp/2;
+t = nfft/fsamp:nfft/fsamp:nfft*nframe/fsamp;
+hestFd_pow = 10*log10(abs(hestFd));
+imagesc(t*1e3, f/1e9, hestFd_pow);
+xlabel('Time (ms)');
+ylabel('Freq (MHz)');
+colorbar();
+title('Estimated channel magnitude [dB]');
 
 %% Estimating the channel in time-domain
 % We next estimate the channel in time-domain
 
 % TODO:  Take the IFFT across the columns and store the results in a 
 % matrix hest
+hest = ifft(hestFd,[],1);
 
 % TODO:  Plot the magnitude of the samples of the impulse response
 % in one of the symbols.  You should see a few of the paths clearly.
 % Label the axes in delay in ns.
-
+hest_dB = 10*log10(abs(hest)); 
+figure;
+t2 = (0:nfft-1)/fsamp;
+plot(t2*1e9, hest_dB(:,20)); hold on;
+stem(dly*1e9,gainDir,'BaseValue',-40, 'MarkerFaceColor','blue','MarkerEdgeColor','blue'); hold off;
+xlim([0 max(dly*1e9)]);
+legend('channel in time-domain','Dir gain for each path');
+xlabel('Delay [ns]');
+ylabel('Magnitude impulse response');
+title('channel in time-domain');
 
 %% Bonus:  Viewing the channel in delay Doppler space
 % Finally, we can estimate the channel in the delay-Doppler space.
@@ -285,21 +310,46 @@ y0 = chan.step(x0_nFrame);
 % Hence, we can see the paths in the delay-Doppler space with a 2D IFFT.
 
 % TODO:  Take a 2D ifft of hestFd and store in a matrix G.
+G = ifft2(hestFd);
 
 % We can now extract the delay-Doppler components from G.
 % Most of the interesting components in a small area:
 %
-%   nrow = 64;
-%   ncol = 32;
-%   Gs = [G(1:nrow,nframe-ncol:nframe) G(1:nrow,1:ncol)];
+nrow = 64;
+ncol = 32;
+Gs = [G(1:nrow,nframe-ncol:nframe) G(1:nrow,1:ncol)];
+del = t2(1:nrow);
+step = 2/(t2(end)/2);
+dopp_v = (-ncol*step:step:ncol*step)*1e-4;
 %
 % TODO:  Plot the magnitude squared of Gs in dB using imagesc.  Label the delay
 % and doppler axes.  You should see the components clearly.
+Gs_dB = 20*log10(abs(Gs));
+figure;
+imagesc(dopp_v/1e3,del*1e9,Gs_dB);
+ylabel('Delay [ns]');
+xlabel('Doppler [kHz]');
+colorbar();
+title('Magnitude squared');
 
 % We can even compare the peaks in the matrix Gs with the delay and Doppler
 % of the actual components.  
 % TODO:  Find the indices of the paths with top 20 directional gains.
+[~,idx] = sort(gainDir, 'descend');
+indeces = idx(1:20);
+dops_p = dopp(indeces);
+delays_p = dly(indeces);
 
 % TODO:  On the same plot as above, plot a circle corresponding to the
 % (doppler,delay) for each of the top components.  You may have to reverse
 % the doppler due to the sign conventions we have used.
+%%
+
+figure;
+imagesc(dopp_v/1e3,del*1e9,Gs_dB); hold on;
+plot(-dops_p/1e3, delays_p*1e9, 'rx', 'MarkerSize',12);
+ylabel('Delay [ns]');
+xlabel('Doppler [kHz]');
+colorbar();
+title('Magnitude squared')
+
