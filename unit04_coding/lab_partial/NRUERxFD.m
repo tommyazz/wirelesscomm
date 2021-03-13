@@ -55,10 +55,8 @@ classdef NRUERxFD < matlab.System
             
             % Get PDSCH received symbols and channel estimates
             % from received grid 
-            [pdschInd,pdschInfo] = nrPDSCHIndices(...
-                obj.carrierConfig, obj.pdschConfig);
-            [pdschRx, pdschHest] = nrExtractResources(pdschInd, rxGrid,...
-                chanGrid);
+            [pdschInd,pdschInfo] = nrPDSCHIndices(obj.carrierConfig, obj.pdschConfig);
+            [pdschRx, pdschHest] = nrExtractResources(pdschInd, rxGrid, chanGrid);
             
             % TODO:  Perform the MMSE equalization using the
             % nrEqualizeMMSE() function.
@@ -66,13 +64,12 @@ classdef NRUERxFD < matlab.System
             % variance as the input.  Store the equalized symbols in
             % obj.pdschEq and  channel state information in a structure,
             % csi.            
-            %    [obj.pdschEq,csi] = nrEqualizeMMSE(...);
+            [obj.pdschEq,csi] = nrEqualizeMMSE(pdschRx,pdschHest,noiseVar);
             
-                        
             % TODO:  Get the LLRs with the nrPDSCHDecode() function.
             % Use carrier and PDSCH configuration, the equalized symbols,
             % and the noise variance, noiseVar.
-            %    [obj.pdschEq,csi] = nrEqualizeMMSE(...);   
+            [dlschLLRs,rxSym] = nrPDSCHDecode(obj.carrierConfig,obj.pdschConfig,obj.pdschEq, noiseVar);   
             
             % Scale LLRs by EbN0.  
             % The csi value computed in the nrEqualizeMMSE()
@@ -85,6 +82,7 @@ classdef NRUERxFD < matlab.System
             % Hence, Eb/N0 = csi/(noiseVar*Qm).
             % Since the LLRs from the nrPDSCHDecode function are 
             % already scaled by 1/noiseVar, we multiply them by  csi/Qm.
+            
             csi = nrLayerDemap(csi); % CSI layer demapping
             numCW = length(csi);
             for cwIdx = 1:numCW
@@ -110,8 +108,8 @@ classdef NRUERxFD < matlab.System
             % TODO:  Decode the bits with the obj.decDLSCH() method.
             % Use the scaled LLRs from above. Use a redundancy version, 
             % rv = 0,  since we are not using HARQ in this lab.
-            %    rv = 0;
-            %    obj.rxBit = obj.decDLSCH(...);
+            rv = 0;
+            obj.rxBits = obj.decDLSCH(dlschLLRs,obj.pdschConfig.Modulation,obj.pdschConfig.NumLayers,rv);
             
         end
         

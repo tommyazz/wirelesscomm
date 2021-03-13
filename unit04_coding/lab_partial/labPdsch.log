@@ -1,0 +1,1266 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 21.1) (preloaded format=pdflatex 2021.3.2)  11 MAR 2021 22:58
+entering extended mode
+**./labPdsch.tex
+(labPdsch.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-06> xparse <2020-03-03>
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
+Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
+File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+\c@part=\count177
+\c@section=\count178
+\c@subsection=\count179
+\c@subsubsection=\count180
+\c@paragraph=\count181
+\c@subparagraph=\count182
+\c@figure=\count183
+\c@table=\count184
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty
+Package: inputenc 2020/08/01 v1.3d Input encoding file
+\inpenc@prehook=\toks15
+\inpenc@posthook=\toks16
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/lm\lmodern.sty
+Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/lmm/m/it on input line 23.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/lmsy/m/n on input line 24.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 25.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 26.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/lmm/b/it on input line 27.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/lmsy/b/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 31.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 32.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/lmr/m/it on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/lmss/bx/n on input line 36.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.c
+fg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen139
+\Gin@req@width=\dimen140
+) (C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color.sty
+Package: color 2020/02/24 v1.2b Standard LaTeX Color (DPC)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+) (C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
+Package: hyperref 2021-02-08 v7.00i Hypertext links for LaTeX
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
+.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
+ty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/kvsetkeys\kvsetkeys.s
+ty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefine
+keys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pdfescape.s
+ty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+) (C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/letltxmacro\letltxmacro
+.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/auxhook\auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+)
+\@linkdim=\dimen141
+\Hy@linkcounter=\count185
+\Hy@pagecounter=\count186
+ (C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
+File: pd1enc.def 2021-02-08 v7.00i Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref-langp
+atches.def
+File: hyperref-langpatches.def 2021-02-08 v7.00i Hyperref: patches for babel la
+nguages
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/etexcmds\etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count187
+ (C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
+File: puenc.def 2021-02-08 v7.00i Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Hyper figures OFF on input line 4180.
+Package hyperref Info: Link nesting OFF on input line 4185.
+Package hyperref Info: Hyper index ON on input line 4188.
+Package hyperref Info: Plain pages OFF on input line 4195.
+Package hyperref Info: Backreferencing OFF on input line 4200.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4433.
+\c@Hy@tempcnt=\count188
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4792.
+\XeTeXLinkMargin=\dimen142
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\bigintcalc
+.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count189
+\Field@Width=\dimen143
+\Fld@charsize=\dimen144
+Package hyperref Info: Hyper figures OFF on input line 6063.
+Package hyperref Info: Link nesting OFF on input line 6068.
+Package hyperref Info: Hyper index ON on input line 6071.
+Package hyperref Info: backreferencing OFF on input line 6078.
+Package hyperref Info: Link coloring OFF on input line 6083.
+Package hyperref Info: Link coloring with OCG OFF on input line 6088.
+Package hyperref Info: PDF/A mode OFF on input line 6093.
+LaTeX Info: Redefining \ref on input line 6133.
+LaTeX Info: Redefining \pageref on input line 6137.
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/base\atbegshi-ltx.sty
+Package: atbegshi-ltx 2020/08/17 v1.0a Emulation of the original atbegshi packa
+ge
+with kernel methods
+)
+\Hy@abspage=\count190
+\c@Item=\count191
+\c@Hfootnote=\count192
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
+File: hpdftex.def 2021-02-08 v7.00i Hyperref driver for pdfTeX
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/base\atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
+e
+with kernel methods
+)
+\Fld@listcount=\count193
+\c@bookmark@seq@number=\count194
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfil
+echeck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/uniquecounter\uniquec
+ounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip49
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
+Package: amsmath 2020/09/23 v2.17i AMS math features
+\@mathmargin=\skip50
+
+For additional information on amsmath, use the `?' option.
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks18
+\ex@=\dimen145
+))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen146
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count195
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count196
+\leftroot@=\count197
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count198
+\DOTSCASE@=\count199
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box47
+\strutbox@=\box48
+\big@size=\dimen147
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count266
+\c@MaxMatrixCols=\count267
+\dotsspace@=\muskip17
+\c@parentequation=\count268
+\dspbrk@lvl=\count269
+\tag@help=\toks19
+\row@=\count270
+\column@=\count271
+\maxfields@=\count272
+\andhelp@=\toks20
+\eqnshift@=\dimen148
+\alignsep@=\dimen149
+\tagshift@=\dimen150
+\tagwidth@=\dimen151
+\totwidth@=\dimen152
+\lineht@=\dimen153
+\@envbody=\toks21
+\multlinegap=\skip51
+\multlinetaggap=\skip52
+\mathdisplay@stack=\toks22
+LaTeX Info: Redefining \[ on input line 2923.
+LaTeX Info: Redefining \] on input line 2924.
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf.s
+ty
+Package: epstopdf 2020-01-24 v2.11 Conversion with epstopdf on the fly (HO)
+ (C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/grfext\grfext.sty
+Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
+ase.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 504.
+))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/colortbl\colortbl.sty
+Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/latex-tools\array.sty
+Package: array 2020/10/01 v2.5c Tabular extension package (FMi)
+\col@sep=\dimen154
+\ar@mcellbox=\box49
+\extrarowheight=\dimen155
+\NC@list=\toks23
+\extratabsurround=\skip53
+\backup@length=\skip54
+\ar@cellbox=\box50
+)
+\everycr=\toks24
+\minrowclearance=\skip55
+)
+LaTeX Info: Redefining \color on input line 709.
+\rownum=\count273
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+) (matlab.sty
+Package: matlab 
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/latex-tools\verbatim.st
+y
+Package: verbatim 2020-07-07 v1.5u LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks25
+\verbatim@line=\toks26
+\verbatim@in@stream=\read2
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/fancyvrb\fancyvrb.sty
+Package: fancyvrb 2021/01/20 v3.7 verbatim text (tvz,hv)
+\FV@CodeLineNo=\count274
+\FV@InFile=\read3
+\FV@TabBox=\box51
+\c@FancyVerbLine=\count275
+\FV@StepNumber=\count276
+\FV@OutFile=\write3
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/base\alltt.sty
+Package: alltt 1997/06/16 v2.0g defines alltt environment
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/upquote\upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/mdframed\mdframed.sty
+Package: mdframed 2013/07/01 1.9b: mdframed
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xparse\xpars
+e.sty
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
+Package: expl3 2021-02-06 L3 programming layer (loader) 
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
+tex.def
+File: l3backend-pdftex.def 2021-02-06 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count277
+\l__pdf_internal_box=\box52
+))
+Package: xparse 2020-10-27 L3 Experimental document command parser
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xparse\xpars
+e-generic.tex))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count278
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/zref\zref-abspage.sty
+Package: zref-abspage 2020-07-03 v2.32 Module abspage for zref (HO)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/zref\zref-base.sty
+Package: zref-base 2020-07-03 v2.32 Module base for zref (HO)
+Package zref Info: New property list: main on input line 764.
+Package zref Info: New property: default on input line 765.
+Package zref Info: New property: page on input line 766.
+)
+\c@abspage=\count279
+Package zref Info: New property: abspage on input line 66.
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/needspace\needspace.sty
+Package: needspace 2010/09/12 v1.3d reserve vertical space
+)
+\mdf@templength=\skip56
+\c@mdf@globalstyle@cnt=\count280
+\mdf@skipabove@length=\skip57
+\mdf@skipbelow@length=\skip58
+\mdf@leftmargin@length=\skip59
+\mdf@rightmargin@length=\skip60
+\mdf@innerleftmargin@length=\skip61
+\mdf@innerrightmargin@length=\skip62
+\mdf@innertopmargin@length=\skip63
+\mdf@innerbottommargin@length=\skip64
+\mdf@splittopskip@length=\skip65
+\mdf@splitbottomskip@length=\skip66
+\mdf@outermargin@length=\skip67
+\mdf@innermargin@length=\skip68
+\mdf@linewidth@length=\skip69
+\mdf@innerlinewidth@length=\skip70
+\mdf@middlelinewidth@length=\skip71
+\mdf@outerlinewidth@length=\skip72
+\mdf@roundcorner@length=\skip73
+\mdf@footenotedistance@length=\skip74
+\mdf@userdefinedwidth@length=\skip75
+\mdf@needspace@length=\skip76
+\mdf@frametitleaboveskip@length=\skip77
+\mdf@frametitlebelowskip@length=\skip78
+\mdf@frametitlerulewidth@length=\skip79
+\mdf@frametitleleftmargin@length=\skip80
+\mdf@frametitlerightmargin@length=\skip81
+\mdf@shadowsize@length=\skip82
+\mdf@extratopheight@length=\skip83
+\mdf@subtitleabovelinewidth@length=\skip84
+\mdf@subtitlebelowlinewidth@length=\skip85
+\mdf@subtitleaboveskip@length=\skip86
+\mdf@subtitlebelowskip@length=\skip87
+\mdf@subtitleinneraboveskip@length=\skip88
+\mdf@subtitleinnerbelowskip@length=\skip89
+\mdf@subsubtitleabovelinewidth@length=\skip90
+\mdf@subsubtitlebelowlinewidth@length=\skip91
+\mdf@subsubtitleaboveskip@length=\skip92
+\mdf@subsubtitlebelowskip@length=\skip93
+\mdf@subsubtitleinneraboveskip@length=\skip94
+\mdf@subsubtitleinnerbelowskip@length=\skip95
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.
+sty
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.sty
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfrcs.st
+y
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
+-common.tex
+\pgfutil@everybye=\toks27
+\pgfutil@tempdima=\dimen156
+\pgfutil@tempdimb=\dimen157
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
+-common-lists.tex))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil
+-latex.def
+\pgfutil@abb=\box53
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs.
+code.tex
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf\pgf.revision.tex)
+Package: pgfrcs 2020/12/27 v3.1.8b (3.1.8b)
+))
+Package: pgf 2020/12/27 v3.1.8b (3.1.8b)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgfcore.
+sty
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/systemlayer\pgfsys.
+sty
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s.code.tex
+Package: pgfsys 2020/12/27 v3.1.8b (3.1.8b)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+.code.tex
+\pgfkeys@pathtoks=\toks28
+\pgfkeys@temptoks=\toks29
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+filtered.code.tex
+\pgfkeys@tmptoks=\toks30
+))
+\pgf@x=\dimen158
+\pgf@y=\dimen159
+\pgf@xa=\dimen160
+\pgf@ya=\dimen161
+\pgf@xb=\dimen162
+\pgf@yb=\dimen163
+\pgf@xc=\dimen164
+\pgf@yc=\dimen165
+\pgf@xd=\dimen166
+\pgf@yd=\dimen167
+\w@pgf@writea=\write4
+\r@pgf@reada=\read4
+\c@pgf@counta=\count281
+\c@pgf@countb=\count282
+\c@pgf@countc=\count283
+\c@pgf@countd=\count284
+\t@pgf@toka=\toks31
+\t@pgf@tokb=\toks32
+\t@pgf@tokc=\toks33
+\pgf@sys@id@count=\count285
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.c
+fg
+File: pgf.cfg 2020/12/27 v3.1.8b (3.1.8b)
+)
+Driver file for pgf: pgfsys-pdftex.def
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s-pdftex.def
+File: pgfsys-pdftex.def 2020/12/27 v3.1.8b (3.1.8b)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+s-common-pdf.def
+File: pgfsys-common-pdf.def 2020/12/27 v3.1.8b (3.1.8b)
+)))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+ssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfsyssoftpath@smallbuffer@items=\count286
+\pgfsyssoftpath@bigbuffer@items=\count287
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsy
+sprotocol.code.tex
+File: pgfsysprotocol.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+e.code.tex
+Package: pgfcore 2020/12/27 v3.1.8b (3.1.8b)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code
+.tex
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc.
+code.tex
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathutil.
+code.tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathparse
+r.code.tex
+\pgfmath@dimen=\dimen168
+\pgfmath@count=\count288
+\pgfmath@box=\box54
+\pgfmath@toks=\toks34
+\pgfmath@stack@operand=\toks35
+\pgfmath@stack@operation=\toks36
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.code.tex
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.basic.code.tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.trigonometric.code.tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.random.code.tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.comparison.code.tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.base.code.tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.round.code.tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.misc.code.tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfunct
+ions.integerarithmetics.code.tex)))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat
+.code.tex
+\c@pgfmathroundto@lastzeros=\count289
+))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code.
+tex)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epoints.code.tex
+File: pgfcorepoints.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@picminx=\dimen169
+\pgf@picmaxx=\dimen170
+\pgf@picminy=\dimen171
+\pgf@picmaxy=\dimen172
+\pgf@pathminx=\dimen173
+\pgf@pathmaxx=\dimen174
+\pgf@pathminy=\dimen175
+\pgf@pathmaxy=\dimen176
+\pgf@xx=\dimen177
+\pgf@xy=\dimen178
+\pgf@yx=\dimen179
+\pgf@yy=\dimen180
+\pgf@zx=\dimen181
+\pgf@zy=\dimen182
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@path@lastx=\dimen183
+\pgf@path@lasty=\dimen184
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathusage.code.tex
+File: pgfcorepathusage.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@shorten@end@additional=\dimen185
+\pgf@shorten@start@additional=\dimen186
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+escopes.code.tex
+File: pgfcorescopes.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfpic=\box55
+\pgf@hbox=\box56
+\pgf@layerbox@main=\box57
+\pgf@picture@serial@count=\count290
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+egraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgflinewidth=\dimen187
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+etransformations.code.tex
+File: pgfcoretransformations.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@pt@x=\dimen188
+\pgf@pt@y=\dimen189
+\pgf@pt@temp=\dimen190
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+equick.code.tex
+File: pgfcorequick.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eobjects.code.tex
+File: pgfcoreobjects.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+earrows.code.tex
+File: pgfcorearrows.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfarrowsep=\dimen191
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eshade.code.tex
+File: pgfcoreshade.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@max=\dimen192
+\pgf@sys@shading@range@num=\count291
+\pgf@shadingcount=\count292
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eimage.code.tex
+File: pgfcoreimage.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+eexternal.code.tex
+File: pgfcoreexternal.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfexternal@startupbox=\box58
+))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+elayers.code.tex
+File: pgfcorelayers.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+etransparency.code.tex
+File: pgfcoretransparency.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+epatterns.code.tex
+File: pgfcorepatterns.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcor
+erdf.code.tex
+File: pgfcorerdf.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+shapes.code.tex
+File: pgfmoduleshapes.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfnodeparttextbox=\box59
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+plot.code.tex
+File: pgfmoduleplot.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfco
+mp-version-0-65.sty
+Package: pgfcomp-version-0-65 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@nodesepstart=\dimen193
+\pgf@nodesepend=\dimen194
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfco
+mp-version-1-18.sty
+Package: pgfcomp-version-1-18 2020/12/27 v3.1.8b (3.1.8b)
+))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgffor.st
+y
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfkeys.s
+ty
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys
+.code.tex))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/pgf/math\pgfmath.sty
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code
+.tex))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.
+code.tex
+Package: pgffor 2020/12/27 v3.1.8b (3.1.8b)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code
+.tex)
+\pgffor@iter=\dimen195
+\pgffor@skip=\dimen196
+\pgffor@stack=\toks37
+\pgffor@toks=\toks38
+))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z\tikz.code.tex
+Package: tikz 2020/12/27 v3.1.8b (3.1.8b)
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibr
+aryplothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@plot@mark@count=\count293
+\pgfplotmarksize=\dimen197
+)
+\tikz@lastx=\dimen198
+\tikz@lasty=\dimen199
+\tikz@lastxsaved=\dimen256
+\tikz@lastysaved=\dimen257
+\tikz@lastmovetox=\dimen258
+\tikz@lastmovetoy=\dimen259
+\tikzleveldistance=\dimen260
+\tikzsiblingdistance=\dimen261
+\tikz@figbox=\box60
+\tikz@figbox@bg=\box61
+\tikz@tempbox=\box62
+\tikz@tempbox@bg=\box63
+\tikztreelevel=\count294
+\tikznumberofchildren=\count295
+\tikznumberofcurrentchild=\count296
+\tikz@fig@count=\count297
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodule
+matrix.code.tex
+File: pgfmodulematrix.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfmatrixcurrentrow=\count298
+\pgfmatrixcurrentcolumn=\count299
+\pgf@matrix@numberofcolumns=\count300
+)
+\tikz@expandcount=\count301
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tik
+z/libraries\tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)))
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/mdframed\md-frame-1.mdf
+File: md-frame-1.mdf 2013/07/01\ 1.9b: md-frame-1
+)
+\mdf@frametitlebox=\box64
+\mdf@footnotebox=\box65
+\mdf@splitbox@one=\box66
+\mdf@splitbox@two=\box67
+\mdf@splitbox@save=\box68
+\mdfsplitboxwidth=\skip96
+\mdfsplitboxtotalwidth=\skip97
+\mdfsplitboxheight=\skip98
+\mdfsplitboxdepth=\skip99
+\mdfsplitboxtotalheight=\skip100
+\mdfframetitleboxwidth=\skip101
+\mdfframetitleboxtotalwidth=\skip102
+\mdfframetitleboxheight=\skip103
+\mdfframetitleboxdepth=\skip104
+\mdfframetitleboxtotalheight=\skip105
+\mdffootnoteboxwidth=\skip106
+\mdffootnoteboxtotalwidth=\skip107
+\mdffootnoteboxheight=\skip108
+\mdffootnoteboxdepth=\skip109
+\mdffootnoteboxtotalheight=\skip110
+\mdftotallinewidth=\skip111
+\mdfboundingboxwidth=\skip112
+\mdfboundingboxtotalwidth=\skip113
+\mdfboundingboxheight=\skip114
+\mdfboundingboxdepth=\skip115
+\mdfboundingboxtotalheight=\skip116
+\mdf@freevspace@length=\skip117
+\mdf@horizontalwidthofbox@length=\skip118
+\mdf@verticalmarginwhole@length=\skip119
+\mdf@horizontalspaceofbox=\skip120
+\mdfsubtitleheight=\skip121
+\mdfsubsubtitleheight=\skip122
+\c@mdfcountframes=\count302
+
+****** mdframed patching \endmdf@trivlist
+
+****** -- success******
+
+\mdf@envdepth=\count303
+\c@mdf@env@i=\count304
+\c@mdf@env@ii=\count305
+\c@mdf@zref@counter=\count306
+Package zref Info: New property: mdf@pagevalue on input line 895.
+)
+   defining Unicode char U+B0 (decimal 176)
+   defining Unicode char U+21B5 (decimal 8629)
+Package hyperref Info: Option `colorlinks' set `true' on input line 30.
+\c@multititle=\count307
+\c@hastoc=\count308
+)
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 22
+.
+ (C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd
+File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+(labPdsch.aux)
+\openout1 = `labPdsch.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
+ii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count309
+\scratchdimen=\dimen262
+\scratchbox=\box69
+\nofMPsegments=\count310
+\nofMParguments=\count311
+\everyMPshowfont=\toks39
+\MPscratchCnt=\count312
+\MPscratchDim=\dimen263
+\MPnumerator=\count313
+\makeMPintoPDFobject=\count314
+\everyMPtoPDFconversion=\toks40
+)
+Package hyperref Info: Link coloring ON on input line 22.
+ (C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
+Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestring\gettit
+lestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count315
+)
+LaTeX Info: Redefining \ref on input line 22.
+LaTeX Info: Redefining \pageref on input line 22.
+LaTeX Info: Redefining \nameref on input line 22.
+ (labPdsch.out) (labPdsch.out)
+\@outlinefile=\write5
+\openout5 = `labPdsch.out'.
+
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
+2.
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 5
+9.
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+) [1
+
+{C:/Users/tommy/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
+<./labPdsch_images//image_0.png, id=20, 507.8975pt x 365.365pt>
+File: ./labPdsch_images//image_0.png Graphic file (type png)
+<use ./labPdsch_images//image_0.png>
+Package pdftex.def Info: ./labPdsch_images//image_0.png  used on input line 93.
+
+(pdftex.def)             Requested size: 345.0pt x 248.18846pt.
+<./labPdsch_images//image_1.png, id=21, 606.265pt x 203.76125pt>
+File: ./labPdsch_images//image_1.png Graphic file (type png)
+<use ./labPdsch_images//image_1.png>
+Package pdftex.def Info: ./labPdsch_images//image_1.png  used on input line 109
+.
+(pdftex.def)             Requested size: -1.00357pt x -0.33578pt.
+ [2 <./labPdsch_images//image_0.png (PNG copy)>]
+<./labPdsch_images//image_2.png, id=28, 471.7625pt x 328.22626pt>
+File: ./labPdsch_images//image_2.png Graphic file (type png)
+<use ./labPdsch_images//image_2.png>
+Package pdftex.def Info: ./labPdsch_images//image_2.png  used on input line 123
+.
+(pdftex.def)             Requested size: -1.00357pt x -0.69615pt.
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
+155.
+
+(C:\Users\tommy\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmtt.fd
+File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Overfull \hbox (133.54866pt too wide) in paragraph at lines 170--170
+[]\T1/lmtt/m/n/10 carrierConfig = nrCarrierConfig("NSizeGrid",NRB,"SubcarrierSp
+acing",SubcarrierSpacing);[] 
+ []
+
+Package mdframed Info: Not enough space on this page on input line 182.
+[3 <./labPdsch_images//image_1.png (PNG copy)> <./labPdsch_images//image_2.png 
+(PNG copy)>]
+Package mdframed Info: Not enough space on this page on input line 182.
+
+Overfull \hbox (96.79877pt too wide) in paragraph at lines 200--200
+[]\T1/lmtt/m/n/10 symbsSubframe = waveformConfig.SlotsPerSubframe * waveformCon
+fig.SymbolsPerSlot;[] 
+ []
+
+
+Overfull \hbox (54.79889pt too wide) in paragraph at lines 207--207
+[]\T1/lmtt/m/n/10 fprintf(1, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 The number of sy
+mbols per subframe = %.f\n\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , symbsSubframe);[]
+ 
+ []
+
+
+Overfull \hbox (165.04857pt too wide) in paragraph at lines 244--244
+[]\T1/lmtt/m/n/10 fdchan = FDChan(waveformConfig, \TS1/lmtt/m/n/10 '\T1/lmtt/m/
+n/10 gain\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , gain, \TS1/lmtt/m/n/10 '\T1/lmtt/m
+/n/10 dly\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , dly, \TS1/lmtt/m/n/10 '\T1/lmtt/m/
+n/10 aoaAz\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , aoaAz, \TS1/lmtt/m/n/10 '\T1/lmtt
+/m/n/10 aoaEl\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , aoaEl, ...[] 
+ []
+
+
+Overfull \hbox (65.29886pt too wide) in paragraph at lines 245--245
+[]                \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 rxVel\TS1/lmtt/m/n/10 '\T1/
+lmtt/m/n/10 , rxVel, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 Etx\TS1/lmtt/m/n/10 '\T1
+/lmtt/m/n/10 , Etx, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 EsN0Avg\TS1/lmtt/m/n/10 '
+\T1/lmtt/m/n/10 , EsN0Avg, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 fc\TS1/lmtt/m/n/10
+ '\T1/lmtt/m/n/10 , fc);[] 
+ []
+
+Package mdframed Info: Not enough space on this page on input line 246.
+[4]
+Package mdframed Info: Not enough space on this page on input line 246.
+
+Overfull \hbox (75.79883pt too wide) in paragraph at lines 300--300
+[]\T1/lmtt/m/n/10 xlabel("Symbol sequence number in the subframe"); ylabel("Sta
+rt Time [ms]");[] 
+ []
+
+
+Overfull \hbox (65.29886pt too wide) in paragraph at lines 301--301
+[]\T1/lmtt/m/n/10 title("Start time for each symbol relative to the start of th
+e subframe");[] 
+ []
+
+<./labPdsch_images//figure_0.png, id=40, 562.1pt x 421.575pt>
+File: ./labPdsch_images//figure_0.png Graphic file (type png)
+<use ./labPdsch_images//figure_0.png>
+Package pdftex.def Info: ./labPdsch_images//figure_0.png  used on input line 30
+5.
+(pdftex.def)             Requested size: 345.0pt x 258.74924pt.
+[5]
+Overfull \hbox (53.99884pt too wide) in paragraph at lines 327--327
+[]\T1/lmtt/m/n/10 chan(n,j) = \sum_k gainComplex(k)*exp(2*pi*1i*(time(j)*fd(k) 
++ n*scs*dly(k))[] 
+ []
+
+Package mdframed Info: Not enough space on this page on input line 355.
+[6 <./labPdsch_images//figure_0.png>]
+Package mdframed Info: Not enough space on this page on input line 355.
+
+Overfull \hbox (54.79889pt too wide) in paragraph at lines 378--378
+[]\T1/lmtt/m/n/10 [rxGrid_test, chanGrid_test, noiseVar_test] = fdchan.step(txG
+rid, 0, 0);[] 
+ []
+
+
+Overfull \hbox (23.29898pt too wide) in paragraph at lines 381--381
+[]\T1/lmtt/m/n/10 imagesc(1:14, 1:nsc, pow2db(abs(chanGrid_test).^2/noiseVar_te
+st));[] 
+ []
+
+<./labPdsch_images//figure_1.png, id=52, 562.1pt x 421.575pt>
+File: ./labPdsch_images//figure_1.png Graphic file (type png)
+<use ./labPdsch_images//figure_1.png>
+Package pdftex.def Info: ./labPdsch_images//figure_1.png  used on input line 38
+7.
+(pdftex.def)             Requested size: 345.0pt x 258.74924pt.
+[7]
+Overfull \hbox (44.29892pt too wide) in paragraph at lines 403--403
+[]    \T1/lmtt/m/n/10 [~, chanGrid_sf, noiseVar_sf] = fdchan.step(txGrid, j-1, 
+slotNum);[] 
+ []
+
+
+Overfull \hbox (23.29898pt too wide) in paragraph at lines 411--411
+[]\T1/lmtt/m/n/10 title("Avg SNR for each transmission number"); ylim([19.9, 20
+.1]);[] 
+ []
+
+
+Package mdframed Warning: You got a bad break
+(mdframed)                because the last box will be empty
+(mdframed)                you have to change it manually
+(mdframed)                by changing the text, the space
+(mdframed)                or something else on input line 412.
+
+[8 <./labPdsch_images//figure_1.png>]
+<./labPdsch_images//figure_2.png, id=63, 562.1pt x 421.575pt>
+File: ./labPdsch_images//figure_2.png Graphic file (type png)
+<use ./labPdsch_images//figure_2.png>
+Package pdftex.def Info: ./labPdsch_images//figure_2.png  used on input line 41
+4.
+(pdftex.def)             Requested size: 345.0pt x 258.74924pt.
+<./labPdsch_images//image_3.png, id=64, 610.28pt x 753.81625pt>
+File: ./labPdsch_images//image_3.png Graphic file (type png)
+<use ./labPdsch_images//image_3.png>
+Package pdftex.def Info: ./labPdsch_images//image_3.png  used on input line 436
+.
+(pdftex.def)             Requested size: -1.00357pt x -1.23074pt.
+Package mdframed Info: Not enough space on this page on input line 452.
+ [9 <./labPdsch_images//figure_2.png> <./labPdsch_images//image_3.png (PNG copy
+)>]
+Package mdframed Info: Not enough space on this page on input line 452.
+
+Overfull \hbox (18.049pt too wide) in paragraph at lines 464--464
+[]    \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 SymbolAllocation\TS1/lmtt/m/n/10 '\T1/l
+mtt/m/n/10 , [1, waveformConfig.SymbolsPerSlot-1], ...[] 
+ []
+
+
+Overfull \hbox (81.04881pt too wide) in paragraph at lines 483--483
+[]\T1/lmtt/m/n/10 tx = NRgNBTxFD(carrierConfig, pdschConfig, \TS1/lmtt/m/n/10 '
+\T1/lmtt/m/n/10 targetCodeRate\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , targetCodeRat
+e);[] 
+ []
+
+[10]
+<./labPdsch_images//figure_3.png, id=76, 1003.75pt x 1003.75pt>
+File: ./labPdsch_images//figure_3.png Graphic file (type png)
+<use ./labPdsch_images//figure_3.png>
+Package pdftex.def Info: ./labPdsch_images//figure_3.png  used on input line 52
+4.
+(pdftex.def)             Requested size: 345.0pt x 345.00758pt.
+ [11]
+Overfull \hbox (60.04887pt too wide) in paragraph at lines 527--527
+[]\T1/lmtt/m/n/10 % We can see that the first and third OFDM symbols across all
+ subcarriers[] 
+ []
+
+
+Overfull \hbox (54.79889pt too wide) in paragraph at lines 551--551
+[]\T1/lmtt/m/n/10 fprintf(1, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 The number of RE
+s allocated in one slot = %.f\n\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , nREPdsch);[]
+ 
+ []
+
+
+Package mdframed Warning: You got a bad break
+(mdframed)                because the last box will be empty
+(mdframed)                you have to change it manually
+(mdframed)                by changing the text, the space
+(mdframed)                or something else on input line 552.
+
+[12 <./labPdsch_images//figure_3.png>]
+Overfull \hbox (117.7987pt too wide) in paragraph at lines 557--557
+[]\T1/lmtt/m/n/10 fprintf(1, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 The fraction of 
+PDSCH REs to the total number of REs = %.6f\n\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 
+, bwFrac);[] 
+ []
+
+
+Overfull \hbox (23.29898pt too wide) in paragraph at lines 572--572
+[]\T1/lmtt/m/n/10 [pdschInd,pdschInfo] = nrPDSCHIndices(carrierConfig, pdschCon
+fig);[] 
+ []
+
+
+Overfull \hbox (18.049pt too wide) in paragraph at lines 586--586
+[]\T1/lmtt/m/n/10 grid on; title("16-QAM constellation diagram of the tx symbol
+s");[] 
+ []
+
+<./labPdsch_images//figure_4.png, id=86, 562.1pt x 421.575pt>
+File: ./labPdsch_images//figure_4.png Graphic file (type png)
+<use ./labPdsch_images//figure_4.png>
+Package pdftex.def Info: ./labPdsch_images//figure_4.png  used on input line 58
+9.
+(pdftex.def)             Requested size: 345.0pt x 258.74924pt.
+[13]
+Overfull \hbox (75.79883pt too wide) in paragraph at lines 617--617
+[]\T1/lmtt/m/n/10 fprintf(1, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 The number of in
+formation bits in the TB = %.f\n\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , n_info_bits
+);[] 
+ []
+
+[14 <./labPdsch_images//figure_4.png>]
+Package mdframed Info: Not enough space on this page on input line 624.
+
+Overfull \hbox (86.2988pt too wide) in paragraph at lines 645--645
+[]\T1/lmtt/m/n/10 % rx = NRUERxFD(carrierConfig, pdschConfig, \TS1/lmtt/m/n/10 
+'\T1/lmtt/m/n/10 targetCodeRate\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , targetCodeRa
+te);[] 
+ []
+
+
+Overfull \hbox (81.04881pt too wide) in paragraph at lines 668--668
+[]\T1/lmtt/m/n/10 tx = NRgNBTxFD(carrierConfig, pdschConfig, \TS1/lmtt/m/n/10 '
+\T1/lmtt/m/n/10 targetCodeRate\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , targetCodeRat
+e);[] 
+ []
+
+
+Overfull \hbox (165.04857pt too wide) in paragraph at lines 670--670
+[]\T1/lmtt/m/n/10 fdchan = FDChan(waveformConfig, \TS1/lmtt/m/n/10 '\T1/lmtt/m/
+n/10 gain\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , gain, \TS1/lmtt/m/n/10 '\T1/lmtt/m
+/n/10 dly\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , dly, \TS1/lmtt/m/n/10 '\T1/lmtt/m/
+n/10 aoaAz\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , aoaAz, \TS1/lmtt/m/n/10 '\T1/lmtt
+/m/n/10 aoaEl\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , aoaEl, ...[] 
+ []
+
+
+Overfull \hbox (39.04893pt too wide) in paragraph at lines 671--671
+[]                \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 rxVel\TS1/lmtt/m/n/10 '\T1/
+lmtt/m/n/10 , rxVel, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 Etx\TS1/lmtt/m/n/10 '\T1
+/lmtt/m/n/10 , Etx, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 EsN0Avg\TS1/lmtt/m/n/10 '
+\T1/lmtt/m/n/10 , 20, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 fc\TS1/lmtt/m/n/10 '\T1
+/lmtt/m/n/10 , fc);[] 
+ []
+
+
+Overfull \hbox (75.79883pt too wide) in paragraph at lines 673--673
+[]\T1/lmtt/m/n/10 rx = NRUERxFD(carrierConfig, pdschConfig, \TS1/lmtt/m/n/10 '\
+T1/lmtt/m/n/10 targetCodeRate\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , targetCodeRate
+);[] 
+ []
+
+
+Package mdframed Warning: You got a bad break
+(mdframed)                because the last box will be empty
+(mdframed)                you have to change it manually
+(mdframed)                by changing the text, the space
+(mdframed)                or something else on input line 682.
+
+Package mdframed Info: You first box width is to small
+ mdframed fixed it
+(mdframed)              on input line 682.
+[15]
+
+Package mdframed Warning: You got a bad break
+(mdframed)                because the last split box is empty
+(mdframed)                You have to change the settings on input line 682.
+
+<./labPdsch_images//figure_5.png, id=102, 562.1pt x 421.575pt>
+File: ./labPdsch_images//figure_5.png Graphic file (type png)
+<use ./labPdsch_images//figure_5.png>
+Package pdftex.def Info: ./labPdsch_images//figure_5.png  used on input line 70
+1.
+(pdftex.def)             Requested size: 345.0pt x 258.74924pt.
+[16 <./labPdsch_images//figure_5.png>]
+Overfull \hbox (81.04881pt too wide) in paragraph at lines 736--736
+[]\T1/lmtt/m/n/10 tx = NRgNBTxFD(carrierConfig, pdschConfig, \TS1/lmtt/m/n/10 '
+\T1/lmtt/m/n/10 targetCodeRate\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , targetCodeRat
+e);[] 
+ []
+
+
+Overfull \hbox (75.79883pt too wide) in paragraph at lines 737--737
+[]\T1/lmtt/m/n/10 rx = NRUERxFD(carrierConfig, pdschConfig, \TS1/lmtt/m/n/10 '\
+T1/lmtt/m/n/10 targetCodeRate\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , targetCodeRate
+);[] 
+ []
+
+
+Overfull \hbox (186.04851pt too wide) in paragraph at lines 744--744
+[]    \T1/lmtt/m/n/10 fdchan = FDChan(waveformConfig, \TS1/lmtt/m/n/10 '\T1/lmt
+t/m/n/10 gain\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , gain, \TS1/lmtt/m/n/10 '\T1/lm
+tt/m/n/10 dly\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , dly, \TS1/lmtt/m/n/10 '\T1/lmt
+t/m/n/10 aoaAz\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , aoaAz, \TS1/lmtt/m/n/10 '\T1/
+lmtt/m/n/10 aoaEl\TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 , aoaEl, ...[] 
+ []
+
+
+Overfull \hbox (107.29874pt too wide) in paragraph at lines 745--745
+[]                    \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 rxVel\TS1/lmtt/m/n/10 '
+\T1/lmtt/m/n/10 , rxVel, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 Etx\TS1/lmtt/m/n/10 
+'\T1/lmtt/m/n/10 , Etx, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 EsN0Avg\TS1/lmtt/m/n/
+10 '\T1/lmtt/m/n/10 , EsN0Average, \TS1/lmtt/m/n/10 '\T1/lmtt/m/n/10 fc\TS1/lmt
+t/m/n/10 '\T1/lmtt/m/n/10 , fc);[] 
+ []
+
+
+Overfull \hbox (54.79889pt too wide) in paragraph at lines 750--750
+[]        \T1/lmtt/m/n/10 [rxGrid, chanGrid, noiseVar] = fdchan.step(txGrid, su
+bF_num, 0);[] 
+ []
+
+[17]
+<./labPdsch_images//figure_6.png, id=113, 562.1pt x 421.575pt>
+File: ./labPdsch_images//figure_6.png Graphic file (type png)
+<use ./labPdsch_images//figure_6.png>
+Package pdftex.def Info: ./labPdsch_images//figure_6.png  used on input line 79
+2.
+(pdftex.def)             Requested size: 345.0pt x 258.74924pt.
+ [18 <./labPdsch_images//figure_6.png>]
+Overfull \hbox (39.04893pt too wide) in paragraph at lines 837--837
+[]\T1/lmtt/m/n/10 plot(repelem(EsN0_shannon, npoints), linspace(0.5,3.5,npoints
+), "k-")[] 
+ []
+
+<./labPdsch_images//figure_7.png, id=120, 562.1pt x 421.575pt>
+File: ./labPdsch_images//figure_7.png Graphic file (type png)
+<use ./labPdsch_images//figure_7.png>
+Package pdftex.def Info: ./labPdsch_images//figure_7.png  used on input line 84
+2.
+(pdftex.def)             Requested size: 345.0pt x 258.74924pt.
+[19 <./labPdsch_images//figure_7.png>]
+Package mdframed Info: Not enough space on this page on input line 846.
+ [20] (labPdsch.aux)
+Package rerunfilecheck Info: File `labPdsch.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+ ) 
+Here is how much of TeX's memory you used:
+ 21196 strings out of 479616
+ 392793 string characters out of 2865002
+ 672001 words of memory out of 3000000
+ 37941 multiletter control sequences out of 15000+200000
+ 427424 words of font info for 38 fonts, out of 3000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 122i,10n,124p,653b,1079s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Users/tommy/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C
+:/Users/tommy/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}<C:/U
+sers/tommy/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/U
+sers/tommy/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/U
+sers/tommy/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Us
+ers/tommy/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Us
+ers/tommy/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb>
+Output written on labPdsch.pdf (20 pages, 637694 bytes).
+PDF statistics:
+ 159 PDF objects out of 1000 (max. 8388607)
+ 30 named destinations out of 1000 (max. 500000)
+ 73 words of extra memory for PDF output out of 10000 (max. 10000000)
+

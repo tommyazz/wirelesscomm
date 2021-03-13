@@ -37,17 +37,21 @@ classdef FDChan < matlab.System
             end
             
             % TODO:  Create complex path gain for each path
-            %   obj.gainComplex = ...            
+            obj.gainComplex = 10.^(0.05*obj.gain).*exp(1i*(rand(size(obj.gain))*2*pi));
            
             % TODO:  Compute the Doppler shift for each path
-            %    obj.fd = ...
+            [x,y,z] = sph2cart(deg2rad(obj.aoaAz'),deg2rad(obj.aoaEl'),ones(size(obj.aoaAz')));
+            u = [x; y; z]';
+            obj.fd = u*obj.rxVel*(obj.fc/physconst('lightspeed'));
             
             % Compute unit vector in direction of each path
             
             % TODO:  Compute the vector of 
             % symbol times relative to the start of the subframe
-            %    obj.symStart = ...            
-                                                   
+            durations = obj.carrierConfig.SymbolLengths ./ obj.carrierConfig.SampleRate; 
+            cumulative_sum = cumsum(durations);
+            obj.symStart = [0, cumulative_sum(1:end-1)]; 
+                                                            
         end
         
         
@@ -60,14 +64,32 @@ classdef FDChan < matlab.System
             %
             % Given the TX grid of OFDM REs, txGrid, the function
             % *  Computes the channel grid, chanGrid, given the 
-            %    subframe number, sfNum, and slotNum, slotNum.
+            %    subframe number, sfNum, and slotNum.
             % *  Computes the noise variance per symbol, noiseVar,
             %    for a target SNR
             % *  Applies the channel and noise to create the RX grid 
             %    of symbols, rxGrid.
+            start_idx = 14*slotNum+1;
+            % disp(obj.symStart(start_idx:start_idx+14-1));
+            t = obj.symStart(start_idx:start_idx+14-1)' + sfNum*1e-3; 
             
-            % TODO
- 
+            [nsc, nsym] = size(txGrid);
+            chanGrid = zeros(nsc, nsym);
+            scs = obj.carrierConfig.SlotsPerSubframe*15*1e3;
+            f = scs*(0:nsc-1)';
+
+            for k = 1:length(obj.gainComplex)
+                phase = obj.fd(k)*t' + obj.dly(k)*f;
+                chanGrid = chanGrid + obj.gainComplex(k)*exp(2*pi*1i*phase);
+            end
+            
+            E_ch_gain = sum(abs(obj.gainComplex).^2);
+            noiseVar = obj.Etx*E_ch_gain/db2pow(obj.EsN0Avg);
+            
+            %chan_awgn = comm.AWGNChannel('NoiseMethod', 'Variance',...
+            %'Variance', noiseVar);
+            
+            rxGrid = txGrid.*chanGrid + (randn(size(txGrid))+1i*randn(size(txGrid)))*sqrt(noiseVar/2);
         end
         
     end
