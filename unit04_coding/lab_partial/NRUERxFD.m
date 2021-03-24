@@ -69,8 +69,10 @@ classdef NRUERxFD < matlab.System
             % TODO:  Get the LLRs with the nrPDSCHDecode() function.
             % Use carrier and PDSCH configuration, the equalized symbols,
             % and the noise variance, noiseVar.
+
             [dlschLLRs,rxSym] = nrPDSCHDecode(obj.carrierConfig,obj.pdschConfig,obj.pdschEq, noiseVar);   
-            
+
+            %    [dlschLLRs,rxSym] = nrPDSCHDecode(...);   
             % Scale LLRs by EbN0.  
             % The csi value computed in the nrEqualizeMMSE()
             % function is csi = |pdschHest|^2 + noiseVar.
