@@ -104,10 +104,10 @@ classdef NRgNBTxFD < matlab.System
                 for icw = 1:obj.pdschConfig.NumCodewords
 
                     % TODO:  Create random bits for each codeword
-                    %    obj.txBits{iharq}{icw} = ...
+                    obj.txBits{iharq}{icw} = randi([0 1], obj.trBlkSizes(icw), 1);
 
                     % TODO:  Set the transport block to be encoded
-                    %    obj.echDLSCH.setTransportBlock(...)
+                    obj.encDLSCH.setTransportBlock(obj.txBits{iharq}{icw},icw-1,iharq-1)
                     % You will need to pass the codeword index, icw-1,
                     % and HARQ process ID, iharq-1
                 end
@@ -127,7 +127,8 @@ classdef NRgNBTxFD < matlab.System
             
             % TODO: Get the redundancy version from the current redundancy
             % version index, obj.rvInd(iharq).  The rv should be
-            %   rv = obj.rvSeq(irv+1), 
+            irv = mod(obj.rvInd(iharq),4);
+            rv = obj.rvSeq(irv+1);
             % where irv cycles, 0,1,2,3,0,1,2,3,...
              
             % Encode the DL-SCH transport block  

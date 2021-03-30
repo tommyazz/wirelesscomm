@@ -133,7 +133,7 @@ classdef NRUERxFD < matlab.System
             % TODO:  Decode the bits with the obj.decDLSCH() method.
             % Use the scaled LLRs from above.        
             obj.rxBits = obj.decDLSCH(dlschLLRs,obj.pdschConfig.Modulation,...
-                                      obj.pdschConfig.NumLayers,rv,iharq-1); 
+                                   obj.pdschConfig.NumLayers,rv); 
         end
         
     end
