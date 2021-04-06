@@ -1,0 +1,385 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>NRgNBTxFD</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-03-30"><meta name="DC.source" content="NRgNBTxFD.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">classdef</span> NRgNBTxFD &lt; matlab.System
+    <span class="comment">% 5G NR gNB transmitter class implemented in frequency domain</span>
+    <span class="keyword">properties</span>
+        <span class="comment">% Configuration</span>
+        carrierConfig;   <span class="comment">% Carrier configuration</span>
+        pdschConfig;     <span class="comment">% PDSCH configuration</span>
+
+        <span class="comment">% Transport block data for last transmission</span>
+        targetCodeRate = 490/1024;  <span class="comment">% Target code rate</span>
+        trBlkSizes;                 <span class="comment">% Transport block size</span>
+
+        <span class="comment">% DLSCH encoder</span>
+        encDLSCH;
+
+        <span class="comment">% HARQ Process</span>
+        nharq = 8;      <span class="comment">% number of HARQ processes</span>
+
+        <span class="comment">% RV sequence.  This is the sequence that the TX will cycle</span>
+        <span class="comment">% through in the RVs</span>
+        rvSeq = [0,3,2,1]';
+
+        <span class="comment">% TX parameters per HARQ process</span>
+        rvInd;  <span class="comment">% Index of the RV for the current transmission</span>
+        newDataAvail;   <span class="comment">% If HARQ process can take new data</span>
+        txBits;         <span class="comment">% Cell array of TX bits</span>
+
+    <span class="keyword">end</span>
+    <span class="keyword">methods</span>
+        <span class="keyword">function</span> obj = NRgNBTxFD(carrierConfig, pdschConfig, <span class="keyword">...</span>
+                varargin)
+            <span class="comment">% Constructor</span>
+
+            <span class="comment">% Save the carrier and PDSCH configuration</span>
+            obj.carrierConfig = carrierConfig;
+            obj.pdschConfig = pdschConfig;
+
+            <span class="comment">% Set parameters from constructor arguments</span>
+            <span class="keyword">if</span> nargin &gt;= 1
+                obj.set(varargin{:});
+            <span class="keyword">end</span>
+
+            <span class="comment">% Create DLSCH encoder system object</span>
+            obj.encDLSCH = nrDLSCH(<span class="string">'MultipleHARQProcesses'</span>, true, <span class="keyword">...</span>
+                <span class="string">'TargetCodeRate'</span>, obj.targetCodeRate);
+
+            <span class="comment">% Initialize the HARQ process parameters</span>
+            obj.rvInd = zeros(obj.nharq, 1);
+            obj.newDataAvail = ones(obj.nharq,1);
+
+            <span class="comment">% TX bits for each HARQ process</span>
+            obj.txBits = cell(obj.nharq,1);
+
+
+        <span class="keyword">end</span>
+
+         <span class="keyword">function</span> setAck(obj, iharq)
+            <span class="comment">% Set that the HARQ transmission was received correctly</span>
+            obj.newDataAvail(iharq) = 1;
+
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="keyword">methods</span> (Access = protected)
+
+        <span class="keyword">function</span> [txGrid, rv, newDat] = stepImpl(obj, iharq)
+            <span class="comment">% step implementation. Creates one slot of samples for each</span>
+            <span class="comment">% component carrier</span>
+            <span class="comment">%</span>
+            <span class="comment">% Parameters</span>
+            <span class="comment">% ----------</span>
+            <span class="comment">% iharq:  HARQ process index to use</span>
+            <span class="comment">%</span>
+            <span class="comment">% Returns:</span>
+            <span class="comment">% --------</span>
+            <span class="comment">% txGrid:  OFDM grid of transmitted symbols</span>
+            <span class="comment">% rv:  Redundancy version for the data</span>
+            <span class="comment">% newDat:  If new data was transmitted in this slot</span>
+
+
+            <span class="comment">% Create the OFDM grid representing the array of modulation</span>
+            <span class="comment">% symbols to be transmitted</span>
+            txGrid = nrResourceGrid(obj.carrierConfig, <span class="keyword">...</span>
+                obj.pdschConfig.NumLayers);
+
+
+            <span class="comment">% Get indices on where the PDSCH is allocated</span>
+            [pdschInd,pdschInfo] = nrPDSCHIndices(obj.carrierConfig, obj.pdschConfig);
+
+
+            <span class="keyword">if</span> obj.newDataAvail(iharq)
+                <span class="comment">% If new data can be transmitted in the HARQ process</span>
+
+                <span class="comment">% Compute the extra overhead from the PT-RS</span>
+                Xoh_PDSCH = 6*obj.pdschConfig.EnablePTRS;
+
+                <span class="comment">% Calculate the transport block size based on the PDSCH</span>
+                <span class="comment">% allocation and target code rate</span>
+                obj.trBlkSizes = nrTBS(obj.pdschConfig.Modulation,obj.pdschConfig.NumLayers,<span class="keyword">...</span>
+                    numel(obj.pdschConfig.PRBSet),pdschInfo.NREPerPRB,<span class="keyword">...</span>
+                    obj.targetCodeRate,Xoh_PDSCH);
+
+                <span class="comment">% Generate random bits for each codeword and set the transport</span>
+                <span class="comment">% block</span>
+                obj.txBits{iharq} = cell(obj.pdschConfig.NumCodewords, 1);
+                <span class="keyword">for</span> icw = 1:obj.pdschConfig.NumCodewords
+
+                    <span class="comment">% TODO:  Create random bits for each codeword</span>
+                    obj.txBits{iharq}{icw} = randi([0 1], obj.trBlkSizes(icw), 1);
+
+                    <span class="comment">% TODO:  Set the transport block to be encoded</span>
+                    obj.encDLSCH.setTransportBlock(obj.txBits{iharq}{icw},icw-1,iharq-1)
+                    <span class="comment">% You will need to pass the codeword index, icw-1,</span>
+                    <span class="comment">% and HARQ process ID, iharq-1</span>
+                <span class="keyword">end</span>
+
+                <span class="comment">% Set the RV index to zero on the first transmission</span>
+                obj.rvInd(iharq) = 0;
+
+                <span class="comment">% Clear new data flag</span>
+                obj.newDataAvail(iharq) = 0;
+
+                <span class="comment">% Mark that the data</span>
+                newDat = true;
+            <span class="keyword">else</span>
+                <span class="comment">% Mark that this data is a re-transmission</span>
+                newDat = false;
+            <span class="keyword">end</span>
+
+            <span class="comment">% TODO: Get the redundancy version from the current redundancy</span>
+            <span class="comment">% version index, obj.rvInd(iharq).  The rv should be</span>
+            irv = mod(obj.rvInd(iharq),4);
+            rv = obj.rvSeq(irv+1);
+            <span class="comment">% where irv cycles, 0,1,2,3,0,1,2,3,...</span>
+
+            <span class="comment">% Encode the DL-SCH transport block</span>
+            codedTrBlock = obj.encDLSCH(obj.pdschConfig.Modulation, <span class="keyword">...</span>
+                obj.pdschConfig.NumLayers, pdschInfo.G, rv, iharq-1);
+
+            <span class="comment">% Increment the RV sequence</span>
+            obj.rvInd(iharq) = obj.rvInd(iharq) + 1;
+
+            <span class="comment">% Modulate the PDSCH modulation</span>
+            pdschSymbols = nrPDSCH(obj.carrierConfig, obj.pdschConfig, <span class="keyword">...</span>
+                codedTrBlock);
+
+            <span class="comment">% Map the modulated symbols to the OFDM grid</span>
+            txGrid(pdschInd) = pdschSymbols;
+
+        <span class="keyword">end</span>
+
+
+
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in NRgNBTxFD (line 34)
+            obj.carrierConfig = carrierConfig;
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef NRgNBTxFD < matlab.System
+    % 5G NR gNB transmitter class implemented in frequency domain
+    properties
+        % Configuration
+        carrierConfig;   % Carrier configuration
+        pdschConfig;     % PDSCH configuration
+                                               
+        % Transport block data for last transmission
+        targetCodeRate = 490/1024;  % Target code rate
+        trBlkSizes;                 % Transport block size
+                       
+        % DLSCH encoder
+        encDLSCH;  
+                
+        % HARQ Process 
+        nharq = 8;      % number of HARQ processes                  
+        
+        % RV sequence.  This is the sequence that the TX will cycle
+        % through in the RVs
+        rvSeq = [0,3,2,1]';
+
+        % TX parameters per HARQ process        
+        rvInd;  % Index of the RV for the current transmission
+        newDataAvail;   % If HARQ process can take new data
+        txBits;         % Cell array of TX bits
+                        
+    end
+    methods
+        function obj = NRgNBTxFD(carrierConfig, pdschConfig, ...
+                varargin)
+            % Constructor
+            
+            % Save the carrier and PDSCH configuration
+            obj.carrierConfig = carrierConfig;
+            obj.pdschConfig = pdschConfig;
+                                                           
+            % Set parameters from constructor arguments
+            if nargin >= 1
+                obj.set(varargin{:});
+            end
+            
+            % Create DLSCH encoder system object
+            obj.encDLSCH = nrDLSCH('MultipleHARQProcesses', true, ...
+                'TargetCodeRate', obj.targetCodeRate); 
+            
+            % Initialize the HARQ process parameters            
+            obj.rvInd = zeros(obj.nharq, 1);
+            obj.newDataAvail = ones(obj.nharq,1);
+            
+            % TX bits for each HARQ process
+            obj.txBits = cell(obj.nharq,1);
+                 
+                             
+        end
+        
+         function setAck(obj, iharq)
+            % Set that the HARQ transmission was received correctly
+            obj.newDataAvail(iharq) = 1;                        
+          
+        end
+    end
+    methods (Access = protected)
+               
+        function [txGrid, rv, newDat] = stepImpl(obj, iharq)
+            % step implementation. Creates one slot of samples for each
+            % component carrier
+            %
+            % Parameters
+            % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+            % iharq:  HARQ process index to use
+            %
+            % Returns:
+            % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+            % txGrid:  OFDM grid of transmitted symbols
+            % rv:  Redundancy version for the data
+            % newDat:  If new data was transmitted in this slot
+                        
+                        
+            % Create the OFDM grid representing the array of modulation
+            % symbols to be transmitted
+            txGrid = nrResourceGrid(obj.carrierConfig, ...
+                obj.pdschConfig.NumLayers);
+            
+                       
+            % Get indices on where the PDSCH is allocated
+            [pdschInd,pdschInfo] = nrPDSCHIndices(obj.carrierConfig, obj.pdschConfig);
+            
+            
+            if obj.newDataAvail(iharq)
+                % If new data can be transmitted in the HARQ process                                                
+                        
+                % Compute the extra overhead from the PT-RS
+                Xoh_PDSCH = 6*obj.pdschConfig.EnablePTRS;     
+
+                % Calculate the transport block size based on the PDSCH
+                % allocation and target code rate
+                obj.trBlkSizes = nrTBS(obj.pdschConfig.Modulation,obj.pdschConfig.NumLayers,...
+                    numel(obj.pdschConfig.PRBSet),pdschInfo.NREPerPRB,...
+                    obj.targetCodeRate,Xoh_PDSCH);
+
+                % Generate random bits for each codeword and set the transport
+                % block
+                obj.txBits{iharq} = cell(obj.pdschConfig.NumCodewords, 1);
+                for icw = 1:obj.pdschConfig.NumCodewords
+
+                    % TODO:  Create random bits for each codeword
+                    obj.txBits{iharq}{icw} = randi([0 1], obj.trBlkSizes(icw), 1);
+
+                    % TODO:  Set the transport block to be encoded
+                    obj.encDLSCH.setTransportBlock(obj.txBits{iharq}{icw},icw-1,iharq-1)
+                    % You will need to pass the codeword index, icw-1,
+                    % and HARQ process ID, iharq-1
+                end
+                
+                % Set the RV index to zero on the first transmission
+                obj.rvInd(iharq) = 0;
+                
+                % Clear new data flag
+                obj.newDataAvail(iharq) = 0;
+                
+                % Mark that the data 
+                newDat = true;                
+            else
+                % Mark that this data is a re-transmission
+                newDat = false;
+            end
+            
+            % TODO: Get the redundancy version from the current redundancy
+            % version index, obj.rvInd(iharq).  The rv should be
+            irv = mod(obj.rvInd(iharq),4);
+            rv = obj.rvSeq(irv+1);
+            % where irv cycles, 0,1,2,3,0,1,2,3,...
+             
+            % Encode the DL-SCH transport block  
+            codedTrBlock = obj.encDLSCH(obj.pdschConfig.Modulation, ...
+                obj.pdschConfig.NumLayers, pdschInfo.G, rv, iharq-1);
+            
+            % Increment the RV sequence
+            obj.rvInd(iharq) = obj.rvInd(iharq) + 1;
+            
+            % Modulate the PDSCH modulation
+            pdschSymbols = nrPDSCH(obj.carrierConfig, obj.pdschConfig, ...
+                codedTrBlock);
+          
+            % Map the modulated symbols to the OFDM grid
+            txGrid(pdschInd) = pdschSymbols;            
+                                    
+        end
+        
+       
+        
+    end
+end
+
+
+##### SOURCE END #####
+--></body></html>
