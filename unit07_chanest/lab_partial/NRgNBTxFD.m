@@ -56,14 +56,15 @@ classdef NRgNBTxFD < matlab.System
                 obj.pdschConfig.NumLayers);           
                        
             % TODO:  Get indices on where the PDSCH is allocated
-            %   pdschInd = nrPDSCHIndices(...);
-            
+            pdschInd = nrPDSCHIndices(obj.carrierConfig,obj.pdschConfig);
             
             % TODO:  Create random bits for the PDSCH 
             % and modulate the bits to symbols.
             % Use obj.bitsPerSym to determine the modulation order
-            %    obj.txBits = ...
-            %    obj.pdschSym = qammod(...);            
+            obj.txBits = randi([0 1], length(pdschInd)*obj.bitsPerSym,1);
+            obj.pdschSym = qammod(obj.txBits, 2^obj.bitsPerSym,... 
+                                 'UnitAveragePower', true, ...
+                                 'InputType', 'bit');   
             
             % Insert the PDSCH symbols into the TX grid            
             txGrid(pdschInd) = obj.pdschSym;
@@ -76,9 +77,9 @@ classdef NRgNBTxFD < matlab.System
 
             % TODO:  Get the DM-R indices and symbols and insert them
             % in the TX grid
-            %   dmrsSym = ...
-            %   dmrsInd = ...
-            %   txGrid(dmrsInd) = ...
+            dmrsSym = nrPDSCHDMRS(obj.carrierConfig, obj.pdschConfig);
+            dmrsInd = nrPDSCHDMRSIndices(obj.carrierConfig, obj.pdschConfig);
+            txGrid(dmrsInd) = dmrsSym;
             
             % For debugging, we create a grid with the labels for 
             % the channel indices
@@ -90,8 +91,6 @@ classdef NRgNBTxFD < matlab.System
             obj.chanNames = {'Other', 'PDSCH', 'DM-RS', 'PT-RS'};                               
                                     
         end
-        
-       
         
     end
 end

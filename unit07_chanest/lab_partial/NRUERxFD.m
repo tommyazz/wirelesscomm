@@ -20,6 +20,7 @@ classdef NRUERxFD < matlab.System
         
         % Channel and noise estimate
         chanEstGrid;
+        chanEstDmr;
         noiseEst;
         
         % RX symbols and estimated channel on the PDSCH
@@ -57,24 +58,41 @@ classdef NRUERxFD < matlab.System
             % Computes the channel estimate
             
             % TODO:  Get the TX DM-RS symbols and indices
-            %   dmrsSymTx = ...
-            %   dmrsInd = ...
+            dmrsSymTx = nrPDSCHDMRS(obj.carrierConfig, obj.pdschConfig);
+            dmrsInd = nrPDSCHDMRSIndices(obj.carrierConfig, obj.pdschConfig);
             
+            rxGrid = rxGrid(:);
             % TODO:  Get RX symbols on the DM-RS
-            %    dmrsSymRx = ...
+            dmrsSymRx = rxGrid(dmrsInd);
             
             % TODO:  Get the raw channel estimate
-            %   chanEstRaw = ...
+            chanEstRaw = dmrsSymRx./dmrsSymTx;
                         
             % Get the symbol numbers and sub-carrier indices of the
             % DM-RS symbols from the DM-RS
-            %   dmrsSymNum(i) = symbol number for the i-th DM-RS symbol
-            %   dmrsScInd(i) = sub-carrier index for the i-th DM-RS symbol
+            % dmrsSymNum(i) = symbol number for the i-th DM-RS symbol
+            nsc = obj.carrierConfig.NSizeGrid*12;
+            tot_dmrs_sym = length(dmrsSymRx);
+            dmrsSymNum = zeros(tot_dmrs_sym,1);
+            dmrsSymNum(1:tot_dmrs_sym/2) = 3;
+            dmrsSymNum(tot_dmrs_sym/2+1:end) = 12;
+            
+            % dmrsScInd(i) = sub-carrier index for the i-th DM-RS symbol
+            sub_indices = obj.pdschConfig.DMRS.DMRSSubcarrierLocations+1;
+            idx_sub_1 = sub_indices(1):12:nsc;
+            idx_sub_2 = sub_indices(2):12:nsc;
+            idx_sub_3 = sub_indices(3):12:nsc;
+            idx_sub_4 = sub_indices(4):12:nsc;
+            tot_sub_idx = sort([idx_sub_1 idx_sub_2 idx_sub_3 idx_sub_4]);
+            
+            dmrsScInd = zeros(tot_dmrs_sym,1);
+            dmrsScInd(1:tot_dmrs_sym/2) = tot_sub_idx;
+            dmrsScInd(tot_dmrs_sym/2+1:end) = tot_sub_idx;
             
             % TODO:  Get the list of all symbol numbers on which DM-RS was
             % transmitted.  You can use the unique command
-            %   dmrsSymNums = unique(...);
-            %   ndrmsSym = length(dmrsSymNums);
+            dmrsSymNums = unique(dmrsSymNum);
+            ndrmsSym = length(dmrsSymNums);
 
             % We first compute the channel and noise 
             % estimate on each of the symbols on which the DM-RS was 
@@ -90,27 +108,27 @@ classdef NRUERxFD < matlab.System
                 
                 % TODO:  Find the indices, k, in which the DM-RS
                 % dmrsSymNum(k)= dmrsSymNum(i).
-                %   I = find(...)                            
+                I = dmrsSymNum == dmrsSymNums(i);                            
                 
                 % TODO:  Get the sub-carrier indices and raw channel 
                 % channel estimate for these RS on the symbol
-                %   ind = ...
-                %   raw = ...
+                ind = dmrsScInd(I);
+                raw = chanEstRaw(I);
                 
                 % TODO:  Use kernelReg to compute the channel estimate
                 % on that DM-RS symbol.  Use the lenFreq and sigFreq
                 % for the kernel length and sigma.
-                %    chanEstDmrs(:,i) = kernelReg(...)
+                chanEstDmrs(:,i) = kernelReg(ind, raw, nsc, obj.lenFreq, obj.sigFreq);
                 
                 % TODO:  Compute the noise estimate on the symbol
                 % using the residual method
-                %    noiseEstDmrs(i) = ...
+                noiseEstDmrs(i) = mean(abs(dmrsSymRx(I) - chanEstDmrs(ind,i).*dmrsSymTx(I)).^2); 
                 
             end
-            
+            obj.chanEstDmr = chanEstDmrs;
             % TODO:  Find the noise estimate over the PDSCH by
             % averaging noiseEstDmrs
-            %   obj.noiseEst = mean(...);         
+            obj.noiseEst = mean(noiseEstDmrs);         
                         
             % TODO:  Finally, we interpolate over time.
             % We will use an estimate of the form
@@ -123,7 +141,11 @@ classdef NRUERxFD < matlab.System
             %     W(i,j) = W0(i,j) / \sum_k W0(k,j)
             %     W0(k,j) = exp(-D(k,j)^2/(2*obj.sigTime^2))
             %     D(k,j) = dmrsSymNum(k) - j
-            %            
+            %
+            j = (1:14);
+            D = dmrsSymNums - j;
+            W0 = exp(-(D.^2/(2*obj.sigTime^2)));
+            W = W0 ./ sum(W0,1);
             
             % Save the time interpolation matrix
             obj.Wtime = W;                      
@@ -165,11 +187,11 @@ classdef NRUERxFD < matlab.System
             pdschInd = nrPDSCHIndices(obj.carrierConfig, obj.pdschConfig);
             
             % TODO:  Get the PDSCH symbols and channel on the indicies 
-            %   obj.pdschSym = ...
-            %   obj.pdschChan = ...
+            obj.pdschSym = rxGrid(pdschInd);
+            obj.pdschChan = obj.chanEstGrid(pdschInd);
             
             % TODO:  Perform the MMSE equalization
-            %   obj.pdschSymEq
+            obj.pdschSymEq = conj(obj.pdschChan).*obj.pdschSym./(abs(obj.pdschChan).^2 + obj.noiseEst);
             
             % Demodulate the symbols
             M = 2^obj.bitsPerSym;
