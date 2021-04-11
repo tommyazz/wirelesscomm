@@ -79,11 +79,17 @@ classdef NRUERxFD < matlab.System
             
             % dmrsScInd(i) = sub-carrier index for the i-th DM-RS symbol
             sub_indices = obj.pdschConfig.DMRS.DMRSSubcarrierLocations+1;
-            idx_sub_1 = sub_indices(1):12:nsc;
-            idx_sub_2 = sub_indices(2):12:nsc;
-            idx_sub_3 = sub_indices(3):12:nsc;
-            idx_sub_4 = sub_indices(4):12:nsc;
-            tot_sub_idx = sort([idx_sub_1 idx_sub_2 idx_sub_3 idx_sub_4]);
+            tot_sub_idx = [];
+            for i=1:length(sub_indices)
+                sub_i = sub_indices(i);
+                idx_sub = sub_i:12:nsc;
+                tot_sub_idx = [tot_sub_idx idx_sub];
+            end
+%             idx_sub_1 = sub_indices(1):12:nsc;
+%             idx_sub_2 = sub_indices(2):12:nsc;
+%             idx_sub_3 = sub_indices(3):12:nsc;
+%             idx_sub_4 = sub_indices(4):12:nsc;
+            tot_sub_idx = sort(tot_sub_idx);
             
             dmrsScInd = zeros(tot_dmrs_sym,1);
             dmrsScInd(1:tot_dmrs_sym/2) = tot_sub_idx;

@@ -1,0 +1,271 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>NRgNBTxFD</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-04-09"><meta name="DC.source" content="NRgNBTxFD.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">classdef</span> NRgNBTxFD &lt; matlab.System
+    <span class="comment">% 5G NR gNB transmitter class implemented in frequency domain</span>
+    <span class="keyword">properties</span>
+        <span class="comment">% Configuration</span>
+        carrierConfig;   <span class="comment">% Carrier configuration</span>
+        pdschConfig;     <span class="comment">% PDSCH configuration</span>
+
+        <span class="comment">% Coded bits transmitted on PDSCH</span>
+        txBits;
+
+        <span class="comment">% Transmitted symbols</span>
+        pdschSym;
+
+        <span class="comment">% Modulation parameters for test</span>
+        bitsPerSym = 2;
+
+        <span class="comment">% Channel</span>
+        txGridChan;
+        chanNames;
+
+
+    <span class="keyword">end</span>
+    <span class="keyword">methods</span>
+        <span class="keyword">function</span> obj = NRgNBTxFD(carrierConfig, pdschConfig, <span class="keyword">...</span>
+                varargin)
+            <span class="comment">% Constructor</span>
+
+            <span class="comment">% Save the carrier and PDSCH configuration</span>
+            obj.carrierConfig = carrierConfig;
+            obj.pdschConfig = pdschConfig;
+
+            <span class="comment">% Set parameters from constructor arguments</span>
+            <span class="keyword">if</span> nargin &gt;= 1
+                obj.set(varargin{:});
+            <span class="keyword">end</span>
+
+
+        <span class="keyword">end</span>
+
+         <span class="keyword">function</span> setAck(obj, iharq)
+            <span class="comment">% Set that the HARQ transmission was received correctly</span>
+            obj.newDataAvail(iharq) = 1;
+
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="keyword">methods</span> (Access = protected)
+
+        <span class="keyword">function</span> [txGrid] = stepImpl(obj)
+            <span class="comment">% step implementation. Creates one slot of samples for each</span>
+            <span class="comment">% component carrier</span>
+
+
+            <span class="comment">% Create the OFDM grid representing the array of modulation</span>
+            <span class="comment">% symbols to be transmitted</span>
+            txGrid = nrResourceGrid(obj.carrierConfig, <span class="keyword">...</span>
+                obj.pdschConfig.NumLayers);
+
+            <span class="comment">% TODO:  Get indices on where the PDSCH is allocated</span>
+            pdschInd = nrPDSCHIndices(obj.carrierConfig,obj.pdschConfig);
+
+            <span class="comment">% TODO:  Create random bits for the PDSCH</span>
+            <span class="comment">% and modulate the bits to symbols.</span>
+            <span class="comment">% Use obj.bitsPerSym to determine the modulation order</span>
+            obj.txBits = randi([0 1], length(pdschInd)*obj.bitsPerSym,1);
+            obj.pdschSym = qammod(obj.txBits, 2^obj.bitsPerSym,<span class="keyword">...</span>
+                                 <span class="string">'UnitAveragePower'</span>, true, <span class="keyword">...</span>
+                                 <span class="string">'InputType'</span>, <span class="string">'bit'</span>);
+
+            <span class="comment">% Insert the PDSCH symbols into the TX grid</span>
+            txGrid(pdschInd) = obj.pdschSym;
+
+            <span class="comment">% Get the PT-RS symbols and indices and insert them</span>
+            <span class="comment">% in the TX grid</span>
+            ptrsSym = nrPDSCHPTRS(obj.carrierConfig, obj.pdschConfig);
+            ptrsInd = nrPDSCHPTRSIndices(obj.carrierConfig, obj.pdschConfig);
+            txGrid(ptrsInd) = ptrsSym;
+
+            <span class="comment">% TODO:  Get the DM-R indices and symbols and insert them</span>
+            <span class="comment">% in the TX grid</span>
+            dmrsSym = nrPDSCHDMRS(obj.carrierConfig, obj.pdschConfig);
+            dmrsInd = nrPDSCHDMRSIndices(obj.carrierConfig, obj.pdschConfig);
+            txGrid(dmrsInd) = dmrsSym;
+
+            <span class="comment">% For debugging, we create a grid with the labels for</span>
+            <span class="comment">% the channel indices</span>
+            numPorts = 1;
+            obj.txGridChan = nrResourceGrid(obj.carrierConfig, numPorts);
+            obj.txGridChan(pdschInd) = 1;
+            obj.txGridChan(dmrsInd) = 2;
+            obj.txGridChan(ptrsInd) = 3;
+            obj.chanNames = {<span class="string">'Other'</span>, <span class="string">'PDSCH'</span>, <span class="string">'DM-RS'</span>, <span class="string">'PT-RS'</span>};
+
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in NRgNBTxFD (line 29)
+            obj.carrierConfig = carrierConfig;
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef NRgNBTxFD < matlab.System
+    % 5G NR gNB transmitter class implemented in frequency domain
+    properties
+        % Configuration
+        carrierConfig;   % Carrier configuration
+        pdschConfig;     % PDSCH configuration
+        
+        % Coded bits transmitted on PDSCH
+        txBits;
+        
+        % Transmitted symbols
+        pdschSym;
+        
+        % Modulation parameters for test
+        bitsPerSym = 2;
+        
+        % Channel
+        txGridChan;
+        chanNames;
+                                                           
+                        
+    end
+    methods
+        function obj = NRgNBTxFD(carrierConfig, pdschConfig, ...
+                varargin)
+            % Constructor
+            
+            % Save the carrier and PDSCH configuration
+            obj.carrierConfig = carrierConfig;
+            obj.pdschConfig = pdschConfig;
+                                                           
+            % Set parameters from constructor arguments
+            if nargin >= 1
+                obj.set(varargin{:});
+            end
+                     
+                             
+        end
+        
+         function setAck(obj, iharq)
+            % Set that the HARQ transmission was received correctly
+            obj.newDataAvail(iharq) = 1;                        
+          
+        end
+    end
+    methods (Access = protected)
+               
+        function [txGrid] = stepImpl(obj)
+            % step implementation. Creates one slot of samples for each
+            % component carrier
+                        
+                        
+            % Create the OFDM grid representing the array of modulation
+            % symbols to be transmitted
+            txGrid = nrResourceGrid(obj.carrierConfig, ...
+                obj.pdschConfig.NumLayers);           
+                       
+            % TODO:  Get indices on where the PDSCH is allocated
+            pdschInd = nrPDSCHIndices(obj.carrierConfig,obj.pdschConfig);
+            
+            % TODO:  Create random bits for the PDSCH 
+            % and modulate the bits to symbols.
+            % Use obj.bitsPerSym to determine the modulation order
+            obj.txBits = randi([0 1], length(pdschInd)*obj.bitsPerSym,1);
+            obj.pdschSym = qammod(obj.txBits, 2^obj.bitsPerSym,... 
+                                 'UnitAveragePower', true, ...
+                                 'InputType', 'bit');   
+            
+            % Insert the PDSCH symbols into the TX grid            
+            txGrid(pdschInd) = obj.pdschSym;
+                                                            
+            % Get the PT-RS symbols and indices and insert them
+            % in the TX grid
+            ptrsSym = nrPDSCHPTRS(obj.carrierConfig, obj.pdschConfig);
+            ptrsInd = nrPDSCHPTRSIndices(obj.carrierConfig, obj.pdschConfig);
+            txGrid(ptrsInd) = ptrsSym;
+
+            % TODO:  Get the DM-R indices and symbols and insert them
+            % in the TX grid
+            dmrsSym = nrPDSCHDMRS(obj.carrierConfig, obj.pdschConfig);
+            dmrsInd = nrPDSCHDMRSIndices(obj.carrierConfig, obj.pdschConfig);
+            txGrid(dmrsInd) = dmrsSym;
+            
+            % For debugging, we create a grid with the labels for 
+            % the channel indices
+            numPorts = 1;
+            obj.txGridChan = nrResourceGrid(obj.carrierConfig, numPorts);
+            obj.txGridChan(pdschInd) = 1;
+            obj.txGridChan(dmrsInd) = 2;
+            obj.txGridChan(ptrsInd) = 3;
+            obj.chanNames = {'Other', 'PDSCH', 'DM-RS', 'PT-RS'};                               
+                                    
+        end
+        
+    end
+end
+
+
+##### SOURCE END #####
+--></body></html>
