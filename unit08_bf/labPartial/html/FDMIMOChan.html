@@ -1,0 +1,425 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>FDMIMOChan</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-04-28"><meta name="DC.source" content="FDMIMOChan.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">classdef</span> FDMIMOChan &lt; matlab.System
+    <span class="comment">% Frequency-domain MIMO multipath channel</span>
+    <span class="keyword">properties</span>
+        <span class="comment">% Configuration</span>
+        carrierConfig;   <span class="comment">% Carrier configuration</span>
+        waveformConfig;  <span class="comment">% Waveform parameters</span>
+
+        <span class="comment">% Path parameters</span>
+        gain;  <span class="comment">% Relative path gain in dB</span>
+        dly;   <span class="comment">% Delay of each path in seconds</span>
+        aodAz, aodEl; <span class="comment">% Angle of departure of each path in degrees</span>
+        aoaAz, aoaEl; <span class="comment">% Angle of arrival of each path in degrees</span>
+
+        <span class="comment">% Derived path parameters</span>
+        fd;    <span class="comment">% Doppler shift for each path</span>
+        gainComplex;  <span class="comment">% Complex gain of each path</span>
+        svTx, svRx;   <span class="comment">% Steering vectors for each path</span>
+        elemGainTx, elemGainRx;  <span class="comment">% Element gains</span>
+
+        <span class="comment">% Other parmaters</span>
+        fc = 28e9;    <span class="comment">% Carrier freq in Hz</span>
+        rxVel = [30,0,0]';  <span class="comment">% RX velocity vector in m/s</span>
+        txVel = [0,0,0]';   <span class="comment">% TX velocity vector in m/s</span>
+        Enoise = 0;         <span class="comment">% Noise energy per sample in dBmJ</span>
+
+        <span class="comment">% Symbol times</span>
+        symStart;  <span class="comment">% symStart(i) = start of symbol i relative to subframe</span>
+
+        <span class="comment">% TX and RX array platforms</span>
+        txArrPlatform = [];
+        rxArrPlatform = [];
+
+    <span class="keyword">end</span>
+    <span class="keyword">methods</span>
+        <span class="keyword">function</span> obj = FDMIMOChan(carrierConfig, varargin)
+            <span class="comment">% Constructor</span>
+
+            <span class="comment">% Save the carrier configuration</span>
+            obj.carrierConfig = carrierConfig;
+
+            <span class="comment">% Set parameters from constructor arguments</span>
+            <span class="keyword">if</span> nargin &gt;= 1
+                obj.set(varargin{:});
+            <span class="keyword">end</span>
+
+            <span class="comment">% Check all the required fields are specified</span>
+            fields = {<span class="string">'txArrPlatform'</span>, <span class="string">'rxArrPlatform'</span>, <span class="string">'gain'</span>, <span class="string">'dly'</span>, <span class="keyword">...</span>
+                <span class="string">'aoaAz'</span>, <span class="string">'aodAz'</span>, <span class="string">'aoaEl'</span>, <span class="string">'aoaAz'</span> };
+            nfields = length(fields);
+            <span class="keyword">for</span> i = 1:nfields
+                fstr = fields{i};
+                <span class="keyword">if</span> isempty(obj.(fstr))
+                    e =  MException(<span class="string">'FDMIMOChan:missingParam'</span>, <span class="keyword">...</span>
+                        <span class="string">'Parameter %s not speficied'</span>, fstr);
+                    throw(e);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="comment">% Complex gain for each path using a random initial phase</span>
+            <span class="comment">% The gains are normalized to an average of one</span>
+            npath = length(obj.gain);
+            phase = 2*pi*rand(npath, 1);
+            obj.gainComplex = db2mag(obj.gain).*exp(1i*phase);
+
+            <span class="comment">% Symbol times relative to the start of the subframe</span>
+            obj.waveformConfig = nrOFDMInfo(obj.carrierConfig);
+            nsym = obj.waveformConfig.SymbolLengths;
+            obj.symStart = nsym/obj.waveformConfig.SampleRate;
+            obj.symStart = cumsum([0 obj.symStart]');
+
+            <span class="comment">% Get Doppler shift for RX</span>
+            vc = physconst(<span class="string">'Lightspeed'</span>);
+            [ux, uy, uz] = sph2cart(deg2rad(obj.aoaAz), deg2rad(obj.aoaEl), 1);
+            obj.fd = [ux uy uz]*obj.rxVel*obj.fc/vc;
+
+            <span class="comment">% Get Doppler shift for TX</span>
+            [ux, uy, uz] = sph2cart(deg2rad(obj.aodAz), deg2rad(obj.aodEl), 1);
+            obj.fd = obj.fd + [ux uy uz]*obj.txVel*obj.fc/vc;
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> computePathSV(obj)
+            <span class="comment">% Computes the element gains and steering vectors of each path</span>
+
+            <span class="comment">% Call the array platform objects to get the steering vectors</span>
+            <span class="comment">% and element gains</span>
+            [obj.svTx, obj.elemGainTx] = <span class="keyword">...</span>
+                obj.txArrPlatform.step(obj.aodAz', obj.aodEl',true);
+            [obj.svRx, obj.elemGainRx] = <span class="keyword">...</span>
+                obj.rxArrPlatform.step(obj.aoaAz', obj.aoaEl',true);
+
+        <span class="keyword">end</span>
+
+
+    <span class="keyword">end</span>
+    <span class="keyword">methods</span> (Access = protected)
+
+
+        <span class="keyword">function</span> [chanGrid, noiseVar] = stepImpl(obj, frameNum, slotNum)
+            <span class="comment">% Applies a frequency domain channel and noise</span>
+            <span class="comment">%</span>
+            <span class="comment">% Parameters</span>
+            <span class="comment">% ----------</span>
+            <span class="comment">% frameNum:  The index of the frame  (1 frame = 10ms)</span>
+            <span class="comment">% slotNum:  The index of the slot in the frame</span>
+            <span class="comment">%    This should be 0,...,waveformConfig.SlotsPerFrame</span>
+            <span class="comment">%</span>
+            <span class="comment">% Outputs</span>
+            <span class="comment">% -------</span>
+            <span class="comment">% chanGrid:  Grid of the channel values</span>
+            <span class="comment">% noiseVar:  Noise variance</span>
+
+            <span class="comment">% Compute the steering vectors and element gains</span>
+            obj.computePathSV();
+
+            <span class="comment">% Get the number of TX and RX elements</span>
+            ntx = obj.txArrPlatform.getNumElements();
+            nrx = obj.rxArrPlatform.getNumElements();
+
+            <span class="comment">% Get the number of sub-carriers</span>
+            nscPerRB = 12;
+            nsc = obj.carrierConfig.NSizeGrid * nscPerRB;
+            nsym = obj.carrierConfig.SymbolsPerSlot;
+
+            <span class="comment">% Compute the frequency of each carrier</span>
+            f = (0:nsc-1)'*obj.carrierConfig.SubcarrierSpacing*1e3;
+
+            <span class="comment">% Compute slot in sub-frame and sub-frame index</span>
+            sfNum = floor(slotNum / obj.waveformConfig.SlotsPerSubframe);
+            slotNum1 = mod(slotNum, obj.waveformConfig.SlotsPerSubframe);
+
+            <span class="comment">% Compute the time for each symbol</span>
+            framePeriod = 0.01;
+            sfPeriod = 1e-3;
+            t = frameNum*framePeriod + sfPeriod*sfNum + <span class="keyword">...</span>
+                obj.symStart(slotNum1+1:slotNum1+nsym);
+
+            <span class="comment">% Initialize the channel grid to zero</span>
+            chanGrid = zeros(nrx, ntx, nsc, nsym);
+            npath = length(obj.gain);
+
+            <span class="comment">% TODO: Set the channel:</span>
+            <span class="comment">%</span>
+            <span class="comment">% chanGrid(j,k,n,t) = MIMO channel matrix from</span>
+            <span class="comment">%    RX antenna j, TX antenna k, sub-carrier n,</span>
+            <span class="comment">%    symbol t.</span>
+            <span class="comment">%</span>
+            <span class="comment">% This should be a sum of the paths</span>
+            <span class="comment">%</span>
+            <span class="comment">% chanGrid(j,k,:,:)</span>
+            <span class="comment">%   = \sum_i exp(1i*phase)*svRx(j,i)*svTx(k,i)</span>
+            <span class="comment">%</span>
+            <span class="comment">% where</span>
+            <span class="comment">%</span>
+            <span class="comment">% phase = 2*pi*(f*obj.dly(i) + t'*obj.fd(i));</span>
+
+            <span class="keyword">for</span> j=1:nrx
+                <span class="keyword">for</span> k=1:ntx
+                    <span class="keyword">for</span> p=1:npath
+                        phase = 2*pi*(f*obj.dly(p) + t'*obj.fd(p));
+                        chan_path = exp(1i*phase)*obj.svRx(j,p)*obj.svTx(k,p);
+                        curr_chan = reshape(chanGrid(j,k,:,:),nsc,nsym);
+                        chanGrid(j,k,:,:) = curr_chan + chan_path;
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="comment">% Compute noise variance</span>
+            noiseVar = db2pow(obj.Enoise);
+
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in FDMIMOChan (line 39)
+            obj.carrierConfig = carrierConfig;
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef FDMIMOChan < matlab.System
+    % Frequency-domain MIMO multipath channel
+    properties
+        % Configuration
+        carrierConfig;   % Carrier configuration
+        waveformConfig;  % Waveform parameters
+                        
+        % Path parameters 
+        gain;  % Relative path gain in dB
+        dly;   % Delay of each path in seconds  
+        aodAz, aodEl; % Angle of departure of each path in degrees      
+        aoaAz, aoaEl; % Angle of arrival of each path in degrees      
+        
+        % Derived path parameters
+        fd;    % Doppler shift for each path      
+        gainComplex;  % Complex gain of each path
+        svTx, svRx;   % Steering vectors for each path
+        elemGainTx, elemGainRx;  % Element gains
+        
+        % Other parmaters
+        fc = 28e9;    % Carrier freq in Hz                        
+        rxVel = [30,0,0]';  % RX velocity vector in m/s
+        txVel = [0,0,0]';   % TX velocity vector in m/s                                        
+        Enoise = 0;         % Noise energy per sample in dBmJ
+       
+        % Symbol times
+        symStart;  % symStart(i) = start of symbol i relative to subframe
+        
+        % TX and RX array platforms
+        txArrPlatform = [];
+        rxArrPlatform = [];
+                     
+    end
+    methods
+        function obj = FDMIMOChan(carrierConfig, varargin)
+            % Constructor
+            
+            % Save the carrier configuration
+            obj.carrierConfig = carrierConfig;
+                                 
+            % Set parameters from constructor arguments
+            if nargin >= 1
+                obj.set(varargin{:});
+            end
+            
+            % Check all the required fields are specified
+            fields = {'txArrPlatform', 'rxArrPlatform', 'gain', 'dly', ...
+                'aoaAz', 'aodAz', 'aoaEl', 'aoaAz' };
+            nfields = length(fields);
+            for i = 1:nfields
+                fstr = fields{i};
+                if isempty(obj.(fstr))
+                    e =  MException('FDMIMOChan:missingParam', ...
+                        'Parameter %s not speficied', fstr);
+                    throw(e);
+                end
+            end                        
+            
+            % Complex gain for each path using a random initial phase
+            % The gains are normalized to an average of one
+            npath = length(obj.gain);
+            phase = 2*pi*rand(npath, 1);
+            obj.gainComplex = db2mag(obj.gain).*exp(1i*phase);                        
+          
+            % Symbol times relative to the start of the subframe       
+            obj.waveformConfig = nrOFDMInfo(obj.carrierConfig);
+            nsym = obj.waveformConfig.SymbolLengths;
+            obj.symStart = nsym/obj.waveformConfig.SampleRate;
+            obj.symStart = cumsum([0 obj.symStart]');      
+            
+            % Get Doppler shift for RX
+            vc = physconst('Lightspeed');
+            [ux, uy, uz] = sph2cart(deg2rad(obj.aoaAz), deg2rad(obj.aoaEl), 1);
+            obj.fd = [ux uy uz]*obj.rxVel*obj.fc/vc;    
+            
+            % Get Doppler shift for TX
+            [ux, uy, uz] = sph2cart(deg2rad(obj.aodAz), deg2rad(obj.aodEl), 1);
+            obj.fd = obj.fd + [ux uy uz]*obj.txVel*obj.fc/vc;                                                       
+        end
+        
+        function computePathSV(obj)
+            % Computes the element gains and steering vectors of each path
+            
+            % Call the array platform objects to get the steering vectors
+            % and element gains
+            [obj.svTx, obj.elemGainTx] = ...
+                obj.txArrPlatform.step(obj.aodAz', obj.aodEl',true);
+            [obj.svRx, obj.elemGainRx] = ...
+                obj.rxArrPlatform.step(obj.aoaAz', obj.aoaEl',true);            
+            
+        end
+        
+        
+    end
+    methods (Access = protected)
+        
+        
+        function [chanGrid, noiseVar] = stepImpl(obj, frameNum, slotNum)
+            % Applies a frequency domain channel and noise
+            %
+            % Parameters
+            % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH            
+            % frameNum:  The index of the frame  (1 frame = 10ms)
+            % slotNum:  The index of the slot in the frame 
+            %    This should be 0,...,waveformConfig.SlotsPerFrame
+            %
+            % Outputs
+            % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-            
+            % chanGrid:  Grid of the channel values
+            % noiseVar:  Noise variance
+            
+            % Compute the steering vectors and element gains
+            obj.computePathSV();
+                        
+            % Get the number of TX and RX elements
+            ntx = obj.txArrPlatform.getNumElements();
+            nrx = obj.rxArrPlatform.getNumElements();
+            
+            % Get the number of sub-carriers 
+            nscPerRB = 12;
+            nsc = obj.carrierConfig.NSizeGrid * nscPerRB;
+            nsym = obj.carrierConfig.SymbolsPerSlot;                       
+            
+            % Compute the frequency of each carrier 
+            f = (0:nsc-1)'*obj.carrierConfig.SubcarrierSpacing*1e3;
+            
+            % Compute slot in sub-frame and sub-frame index
+            sfNum = floor(slotNum / obj.waveformConfig.SlotsPerSubframe);
+            slotNum1 = mod(slotNum, obj.waveformConfig.SlotsPerSubframe);
+            
+            % Compute the time for each symbol
+            framePeriod = 0.01;
+            sfPeriod = 1e-3;
+            t = frameNum*framePeriod + sfPeriod*sfNum + ...
+                obj.symStart(slotNum1+1:slotNum1+nsym);                        
+            
+            % Initialize the channel grid to zero
+            chanGrid = zeros(nrx, ntx, nsc, nsym);
+            npath = length(obj.gain);
+                                 
+            % TODO: Set the channel:
+            % 
+            % chanGrid(j,k,n,t) = MIMO channel matrix from 
+            %    RX antenna j, TX antenna k, sub-carrier n,
+            %    symbol t.
+            % 
+            % This should be a sum of the paths
+            %  
+            % chanGrid(j,k,:,:) 
+            %   = \sum_i exp(1i*phase)*svRx(j,i)*svTx(k,i)
+            %
+            % where
+            % 
+            % phase = 2*pi*(f*obj.dly(i) + t'*obj.fd(i)); 
+            
+            for j=1:nrx
+                for k=1:ntx
+                    for p=1:npath
+                        phase = 2*pi*(f*obj.dly(p) + t'*obj.fd(p));
+                        chan_path = exp(1i*phase)*obj.svRx(j,p)*obj.svTx(k,p);
+                        curr_chan = reshape(chanGrid(j,k,:,:),nsc,nsym);
+                        chanGrid(j,k,:,:) = curr_chan + chan_path;
+                    end
+                end
+            end
+            
+            % Compute noise variance                        
+            noiseVar = db2pow(obj.Enoise);
+                                                                         
+        end
+        
+    end
+end
+
+
+##### SOURCE END #####
+--></body></html>

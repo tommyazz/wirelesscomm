@@ -55,13 +55,11 @@ classdef ArrayPlatform < matlab.System
                         
             % TODO:  Get the pattern for the element using the elem.pattern
             % method
-            %   [elemGain,az,el] = obj.elem.pattern(...);               
-            
+            [elemGain,az,el] = obj.elem.pattern(obj.fc,'Type','directivity');               
                                     
             % TODO:  Create the gridded interpolant object 
             % for element gain
-            %    obj.elemGainInterp = griddedInterpolant(...);
-            
+            obj.elemGainInterp = griddedInterpolant({el,az},elemGain);
             
             % Get a vector of values with the elements az(i) and el(j).
             [azMat, elMat] = meshgrid(az, el);
@@ -70,27 +68,26 @@ classdef ArrayPlatform < matlab.System
             elemGainVal = elemGain(:);
 
             % TODO:  Create a steering vector object with the array
-            %    obj.svObj = phased.SteeringVector(...);    
-            
+            obj.svObj = phased.SteeringVector('SensorArray', obj.arr);    
 
             % TODO:  Get the steering vectors
-            %    Sv0 = obj.svObj(...);
-            
+            Sv0 = obj.svObj(obj.fc, [azVal elVal]');
             
             % TODO:  Compute un-normalized spatial signature   
             % by multiplying the steering vectors with the element gain
-            %    SvNoNorm = ...
-            
+            elemGainLin = db2mag(elemGainVal);
+            SvNoNorm = Sv0.*elemGainLin';
             
             % TODO:  Compute the normalization matrix by integrating the
             % un-normalized steering vectors
-            %    Q = ...
+            cosel = cos(deg2rad(elVal));
+            Q = (1/length(elVal))*(SvNoNorm.*cosel')*(SvNoNorm') / mean(cosel);
             
             % Ensure matrix is Hermitian
             Q = (Q+Q')/2;
             
             % TODO:  Save the inverse matrix square root of Q
-            %    obj.Qinv = ...
+            obj.Qinv = sqrtm(Q);
             
         end
                 
@@ -188,21 +185,22 @@ classdef ArrayPlatform < matlab.System
             % TODO:  Convert the global angles (az, el) to local
             % angles (azLoc, elLoc).  Use the 
             % global2localcoord() method with the 'ss' option.
-            
+            locCoord = global2localcoord([az; el; ones(size(az));],'ss',[0;0;0],obj.axesLoc);
+            azLoc = locCoord(1,:);
+            elLoc = locCoord(2,:);
             
             % TODO: Get the SV in the local coordinates
-            %    Sv0 = obj.svObj(...)
-            
-                        
+            Sv0 = obj.svObj(obj.fc, [azLoc(:) elLoc(:)]');
+                       
             % TODO:  Get the directivity gain of the element from the
             % local angles.
-            %    elemGain = obj.elem.step(...) 
-            
+            elemGain = obj.elemGainInterp(elLoc, azLoc); 
+            elemGainLin = db2mag(elemGain(:));
+            SvNoNorm = Sv0.*elemGainLin';
             
             % TODO:  Compute the normalized steering vectors
-            %   Sv = ...
-            
-                         
+         
+            Sv = obj.Qinv \ SvNoNorm;
             
         end
 

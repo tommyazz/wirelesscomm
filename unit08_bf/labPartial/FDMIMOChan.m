@@ -84,9 +84,9 @@ classdef FDMIMOChan < matlab.System
             % Call the array platform objects to get the steering vectors
             % and element gains
             [obj.svTx, obj.elemGainTx] = ...
-                obj.txArrPlatform.step(obj.aodAz, obj.aodEl);
+                obj.txArrPlatform.step(obj.aodAz', obj.aodEl',true);
             [obj.svRx, obj.elemGainRx] = ...
-                obj.rxArrPlatform.step(obj.aoaAz, obj.aoaEl);            
+                obj.rxArrPlatform.step(obj.aoaAz', obj.aoaEl',true);            
             
         end
         
@@ -138,7 +138,6 @@ classdef FDMIMOChan < matlab.System
             chanGrid = zeros(nrx, ntx, nsc, nsym);
             npath = length(obj.gain);
                                  
-
             % TODO: Set the channel:
             % 
             % chanGrid(j,k,n,t) = MIMO channel matrix from 
@@ -152,13 +151,22 @@ classdef FDMIMOChan < matlab.System
             %
             % where
             % 
-            % phase = 2*pi*(f*obj.dly(i) + t'*obj.fd(i));             
+            % phase = 2*pi*(f*obj.dly(i) + t'*obj.fd(i)); 
             
+            for j=1:nrx
+                for k=1:ntx
+                    for p=1:npath
+                        phase = 2*pi*(f*obj.dly(p) + t'*obj.fd(p));
+                        chan_path = exp(1i*phase)*obj.svRx(j,p)*obj.svTx(k,p);
+                        curr_chan = reshape(chanGrid(j,k,:,:),nsc,nsym);
+                        chanGrid(j,k,:,:) = curr_chan + chan_path;
+                    end
+                end
+            end
             
             % Compute noise variance                        
             noiseVar = db2pow(obj.Enoise);
-                                
-                                                
+                                                                         
         end
         
     end

@@ -1,0 +1,511 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ArrayPlatform</title><meta name="generator" content="MATLAB 9.9"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-04-28"><meta name="DC.source" content="ArrayPlatform.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="keyword">classdef</span> ArrayPlatform &lt; matlab.System
+    <span class="comment">% ArrayWithAxes.  Class containing an antenna array and axes.</span>
+    <span class="keyword">properties</span>
+
+        fc = 28e9;  <span class="comment">% Carrier frequency</span>
+
+        <span class="comment">% Element within each array.</span>
+        elem = [];
+
+        <span class="comment">% Gridded interpolant object for the element gain in linear scale</span>
+        elemGainInterp = [];
+
+        <span class="comment">% Antenna array.</span>
+        arr = [];
+
+        <span class="comment">% Steering vector object</span>
+        svObj = [];
+
+        <span class="comment">% Azimuth and elevation angle of the element peak directivity</span>
+        axesAz = 0;
+        axesEl = 0;
+
+        <span class="comment">% Axes of the element local coordinate frame of reference</span>
+        axesLoc = eye(3);
+
+        <span class="comment">% Velocity vector in 3D in m/s</span>
+        vel = zeros(1,3);
+
+        <span class="comment">% Position in m</span>
+        pos = zeros(1,3);
+
+        <span class="comment">% Normalization matrix</span>
+        Qinv = [];
+    <span class="keyword">end</span>
+
+    <span class="keyword">methods</span>
+        <span class="keyword">function</span> obj = ArrayPlatform(varargin)
+            <span class="comment">% Constructor</span>
+
+            <span class="comment">% Set key-value pair arguments</span>
+            <span class="keyword">if</span> nargin &gt;= 1
+                obj.set(varargin{:});
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+
+        <span class="keyword">function</span> computeNormMatrix(obj)
+            <span class="comment">% The method performs two key tasks:</span>
+            <span class="comment">% * Measures the element pattern and creates a gridded</span>
+            <span class="comment">%   interpolant object to interpolate the values at other</span>
+            <span class="comment">%   angles</span>
+            <span class="comment">% * Compute the normalization matrix to account for mutual</span>
+            <span class="comment">%   coupling</span>
+
+            <span class="comment">% TODO:  Get the pattern for the element using the elem.pattern</span>
+            <span class="comment">% method</span>
+            [elemGain,az,el] = obj.elem.pattern(obj.fc,<span class="string">'Type'</span>,<span class="string">'directivity'</span>);
+
+            <span class="comment">% TODO:  Create the gridded interpolant object</span>
+            <span class="comment">% for element gain</span>
+            obj.elemGainInterp = griddedInterpolant({el,az},elemGain);
+
+            <span class="comment">% Get a vector of values with the elements az(i) and el(j).</span>
+            [azMat, elMat] = meshgrid(az, el);
+            azVal = azMat(:);
+            elVal = elMat(:);
+            elemGainVal = elemGain(:);
+
+            <span class="comment">% TODO:  Create a steering vector object with the array</span>
+            obj.svObj = phased.SteeringVector(<span class="string">'SensorArray'</span>, obj.arr);
+
+            <span class="comment">% TODO:  Get the steering vectors</span>
+            Sv0 = obj.svObj(obj.fc, [azVal elVal]');
+
+            <span class="comment">% TODO:  Compute un-normalized spatial signature</span>
+            <span class="comment">% by multiplying the steering vectors with the element gain</span>
+            elemGainLin = db2mag(elemGainVal);
+            SvNoNorm = Sv0.*elemGainLin';
+
+            <span class="comment">% TODO:  Compute the normalization matrix by integrating the</span>
+            <span class="comment">% un-normalized steering vectors</span>
+            cosel = cos(deg2rad(elVal));
+            Q = (1/length(elVal))*(SvNoNorm.*cosel')*(SvNoNorm') / mean(cosel);
+
+            <span class="comment">% Ensure matrix is Hermitian</span>
+            Q = (Q+Q')/2;
+
+            <span class="comment">% TODO:  Save the inverse matrix square root of Q</span>
+            obj.Qinv = sqrtm(Q);
+
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> alignAxes(obj,az,el)
+            <span class="comment">% Aligns the axes to given az and el angles</span>
+
+            <span class="comment">% Set the axesAz and axesEl to az and el</span>
+            obj.axesAz = az;
+            obj.axesEl = el;
+
+            <span class="comment">% Creates axes aligned with az and el</span>
+            obj.axesLoc = azelaxes(az,el);
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> dop = doppler(obj,az,el)
+            <span class="comment">% Computes the Doppler shift of a set of paths</span>
+            <span class="comment">% The angles of the paths are given as (az,el) pairs</span>
+            <span class="comment">% in the global frame of reference.</span>
+
+            <span class="comment">% Finds unit vectors in the direction of each path</span>
+            npath = length(el);
+            [u1,u2,u3] = sph2cart(deg2rad(az),deg2rad(el),ones(1,npath));
+            u = [u1; u2; u3];
+
+            <span class="comment">% Compute the Doppler shift of each path via an inner product</span>
+            <span class="comment">% of the path direction and velocity vector.</span>
+            vcos = obj.vel*u;
+            vc = physconst(<span class="string">'lightspeed'</span>);
+            dop = vcos*obj.fc/vc;
+
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> releaseSV(obj)
+            <span class="comment">% Creates the steering vector object if it has not yet been</span>
+            <span class="comment">% created.  Otherwise release it.  This is needed since the</span>
+            <span class="comment">% sv object requires that it takes the same number of</span>
+            <span class="comment">% inputs each time.</span>
+            <span class="keyword">if</span> isempty(obj.svObj)
+                obj.svObj = phased.SteeringVector(<span class="string">'SensorArray'</span>,obj.arr);
+            <span class="keyword">else</span>
+                obj.svObj.release();
+            <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> n = getNumElements(obj)
+            <span class="comment">% Gets the number of elements</span>
+            n = obj.arr.getNumElements();
+
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> elemPosGlob = getElementPos(obj)
+            <span class="comment">% Gets the array elements in the global reference frame</span>
+
+            <span class="comment">% Get the element position in the local reference frame</span>
+            elemPosLoc = obj.arr.getElementPosition();
+
+            <span class="comment">% Convert to the global reference frame</span>
+            elemPosGlob = local2globalcoord(elemPosLoc, <span class="string">'rr'</span>, <span class="keyword">...</span>
+                zeros(3,1), obj.axesLoc) + reshape(obj.pos,3,1);
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+
+    <span class="keyword">methods</span> (Access = protected)
+
+        <span class="keyword">function</span> setupImpl(obj)
+            <span class="comment">% setup:  This is called before the first step.</span>
+            obj.computeNormMatrix();
+
+
+        <span class="keyword">end</span>
+
+        <span class="keyword">function</span> releaseImpl(obj)
+            <span class="comment">% release:  Called to release the object</span>
+            obj.svObj.release();
+        <span class="keyword">end</span>
+
+       <span class="keyword">function</span> [Sv, elemGain] = stepImpl(obj, az, el, relSV)
+            <span class="comment">% Gets normalized steering vectors and element gains for a set of angles</span>
+            <span class="comment">% The angles az and el should be columns vectors along which</span>
+            <span class="comment">% the outputs are to be computed.</span>
+            <span class="comment">% If the relSV == true, then the steering vector object is</span>
+            <span class="comment">% released.  This is needed in case the dimensions of the past</span>
+            <span class="comment">% call are the different from the past one</span>
+
+            <span class="comment">% Release the SV</span>
+            <span class="keyword">if</span> nargin &lt; 4
+                relSV = true;
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> relSV
+                obj.releaseSV();
+            <span class="keyword">end</span>
+
+            <span class="comment">% TODO:  Convert the global angles (az, el) to local</span>
+            <span class="comment">% angles (azLoc, elLoc).  Use the</span>
+            <span class="comment">% global2localcoord() method with the 'ss' option.</span>
+            locCoord = global2localcoord([az; el; ones(size(az));],<span class="string">'ss'</span>,[0;0;0],obj.axesLoc);
+            azLoc = locCoord(1,:);
+            elLoc = locCoord(2,:);
+
+            <span class="comment">% TODO: Get the SV in the local coordinates</span>
+            Sv0 = obj.svObj(obj.fc, [azLoc(:) elLoc(:)]');
+
+            <span class="comment">% TODO:  Get the directivity gain of the element from the</span>
+            <span class="comment">% local angles.</span>
+            elemGain = obj.elemGainInterp(elLoc, azLoc);
+            elemGainLin = db2mag(elemGain(:));
+            SvNoNorm = Sv0.*elemGainLin';
+
+            <span class="comment">% TODO:  Compute the normalized steering vectors</span>
+
+            Sv = obj.Qinv \ SvNoNorm;
+
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+ans = 
+
+  ArrayPlatform with properties:
+
+                fc: 2.8000e+10
+              elem: []
+    elemGainInterp: []
+               arr: []
+             svObj: []
+            axesAz: 0
+            axesEl: 0
+           axesLoc: [3&times;3 double]
+               vel: [0 0 0]
+               pos: [0 0 0]
+              Qinv: []
+
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef ArrayPlatform < matlab.System
+    % ArrayWithAxes.  Class containing an antenna array and axes.
+    properties
+        
+        fc = 28e9;  % Carrier frequency
+        
+        % Element within each array. 
+        elem = [];
+        
+        % Gridded interpolant object for the element gain in linear scale
+        elemGainInterp = [];
+                
+        % Antenna array.  
+        arr = [];
+        
+        % Steering vector object
+        svObj = []; 
+        
+        % Azimuth and elevation angle of the element peak directivity
+        axesAz = 0;
+        axesEl = 0;
+        
+        % Axes of the element local coordinate frame of reference
+        axesLoc = eye(3);
+        
+        % Velocity vector in 3D in m/s
+        vel = zeros(1,3);
+        
+        % Position in m
+        pos = zeros(1,3);
+        
+        % Normalization matrix
+        Qinv = [];
+    end
+    
+    methods
+        function obj = ArrayPlatform(varargin)
+            % Constructor
+            
+            % Set key-value pair arguments
+            if nargin >= 1
+                obj.set(varargin{:});
+            end
+        end
+        
+       
+        
+        function computeNormMatrix(obj)
+            % The method performs two key tasks:
+            % * Measures the element pattern and creates a gridded 
+            %   interpolant object to interpolate the values at other
+            %   angles
+            % * Compute the normalization matrix to account for mutual
+            %   coupling
+                        
+            % TODO:  Get the pattern for the element using the elem.pattern
+            % method
+            [elemGain,az,el] = obj.elem.pattern(obj.fc,'Type','directivity');               
+                                    
+            % TODO:  Create the gridded interpolant object 
+            % for element gain
+            obj.elemGainInterp = griddedInterpolant({el,az},elemGain);
+            
+            % Get a vector of values with the elements az(i) and el(j).
+            [azMat, elMat] = meshgrid(az, el);
+            azVal = azMat(:);
+            elVal = elMat(:);
+            elemGainVal = elemGain(:);
+
+            % TODO:  Create a steering vector object with the array
+            obj.svObj = phased.SteeringVector('SensorArray', obj.arr);    
+
+            % TODO:  Get the steering vectors
+            Sv0 = obj.svObj(obj.fc, [azVal elVal]');
+            
+            % TODO:  Compute un-normalized spatial signature   
+            % by multiplying the steering vectors with the element gain
+            elemGainLin = db2mag(elemGainVal);
+            SvNoNorm = Sv0.*elemGainLin';
+            
+            % TODO:  Compute the normalization matrix by integrating the
+            % un-normalized steering vectors
+            cosel = cos(deg2rad(elVal));
+            Q = (1/length(elVal))*(SvNoNorm.*cosel')*(SvNoNorm') / mean(cosel);
+            
+            % Ensure matrix is Hermitian
+            Q = (Q+Q')/2;
+            
+            % TODO:  Save the inverse matrix square root of Q
+            obj.Qinv = sqrtm(Q);
+            
+        end
+                
+        function alignAxes(obj,az,el)
+            % Aligns the axes to given az and el angles
+            
+            % Set the axesAz and axesEl to az and el
+            obj.axesAz = az;
+            obj.axesEl = el;
+            
+            % Creates axes aligned with az and el
+            obj.axesLoc = azelaxes(az,el);
+        end
+        
+        function dop = doppler(obj,az,el)
+            % Computes the Doppler shift of a set of paths
+            % The angles of the paths are given as (az,el) pairs
+            % in the global frame of reference.
+            
+            % Finds unit vectors in the direction of each path
+            npath = length(el);
+            [u1,u2,u3] = sph2cart(deg2rad(az),deg2rad(el),ones(1,npath));
+            u = [u1; u2; u3];
+            
+            % Compute the Doppler shift of each path via an inner product
+            % of the path direction and velocity vector.
+            vcos = obj.vel*u;
+            vc = physconst('lightspeed');
+            dop = vcos*obj.fc/vc;            
+            
+        end
+        
+        function releaseSV(obj)
+            % Creates the steering vector object if it has not yet been
+            % created.  Otherwise release it.  This is needed since the 
+            % sv object requires that it takes the same number of 
+            % inputs each time.
+            if isempty(obj.svObj)
+                obj.svObj = phased.SteeringVector('SensorArray',obj.arr);
+            else
+                obj.svObj.release();
+            end
+            
+        end
+        
+        function n = getNumElements(obj)
+            % Gets the number of elements
+            n = obj.arr.getNumElements();
+            
+        end
+        
+        function elemPosGlob = getElementPos(obj)
+            % Gets the array elements in the global reference frame
+           
+            % Get the element position in the local reference frame
+            elemPosLoc = obj.arr.getElementPosition();
+            
+            % Convert to the global reference frame
+            elemPosGlob = local2globalcoord(elemPosLoc, 'rr', ...
+                zeros(3,1), obj.axesLoc) + reshape(obj.pos,3,1);
+        end
+                     
+    end
+    
+    methods (Access = protected)
+        
+        function setupImpl(obj)
+            % setup:  This is called before the first step.
+            obj.computeNormMatrix();
+            
+         
+        end
+        
+        function releaseImpl(obj)
+            % release:  Called to release the object
+            obj.svObj.release();
+        end
+        
+       function [Sv, elemGain] = stepImpl(obj, az, el, relSV)
+            % Gets normalized steering vectors and element gains for a set of angles
+            % The angles az and el should be columns vectors along which
+            % the outputs are to be computed.  
+            % If the relSV == true, then the steering vector object is
+            % released.  This is needed in case the dimensions of the past
+            % call are the different from the past one
+            
+            % Release the SV
+            if nargin < 4
+                relSV = true;
+            end
+            if relSV
+                obj.releaseSV();
+            end
+            
+            % TODO:  Convert the global angles (az, el) to local
+            % angles (azLoc, elLoc).  Use the 
+            % global2localcoord() method with the 'ss' option.
+            locCoord = global2localcoord([az; el; ones(size(az));],'ss',[0;0;0],obj.axesLoc);
+            azLoc = locCoord(1,:);
+            elLoc = locCoord(2,:);
+            
+            % TODO: Get the SV in the local coordinates
+            Sv0 = obj.svObj(obj.fc, [azLoc(:) elLoc(:)]');
+                       
+            % TODO:  Get the directivity gain of the element from the
+            % local angles.
+            elemGain = obj.elemGainInterp(elLoc, azLoc); 
+            elemGainLin = db2mag(elemGain(:));
+            SvNoNorm = Sv0.*elemGainLin';
+            
+            % TODO:  Compute the normalized steering vectors
+         
+            Sv = obj.Qinv \ SvNoNorm;
+            
+        end
+
+    end
+    
+    
+end
+
+##### SOURCE END #####
+--></body></html>

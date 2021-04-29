@@ -1,4 +1,4 @@
-%% Simulating a 28 GHz antenna for a UAV
+G%% Simulating a 28 GHz antenna for a UAV
 %
 % For complex antennas, it is often necessary to perform detailed EM
 % simulations in third-party software such as HFSS and then import 
